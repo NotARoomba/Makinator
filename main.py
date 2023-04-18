@@ -16,7 +16,8 @@ def main():
     i = 2
     d = int(len(numbers)//2)
     skip = 10
-    while not len(numbers) <= 1:
+    while not len(numbers) <= 1: 
+        random.random()
         if (random.random() > 0.5) and (0 < len(list(filter(lambda x: (x < d), numbers))) <= int(len(numbers)/2)) or (0 < len(list(filter(lambda x: (x > d), numbers))) <= int(len(numbers)/2)):
             #q = getInput(f'Is your number less than {d}?\n', str, ['y', 'n'])
             text.config(text=f'Is your number less than {d}?\n', font=font)
@@ -27,6 +28,7 @@ def main():
             # print(numbers)
             skip *= -1 if option.get() else abs(skip/skip)
             d = (int(d//2) if option.get() else int(d*1.2))
+            d+=10
         elif (0 < len(list(filter(lambda x: x % i == 0, numbers))) <= int(len(numbers)/2) or (0 < len(list(filter(lambda x: not x % i == 0, numbers))) <= int(len(numbers)/2))):
             #q = getInput(f'Is your number divisible by {i}?\n', str, ['y', 'n'])
             text.config(text=f'Is your number divisible by {i}?\n', font=font)
@@ -35,8 +37,10 @@ def main():
             # print(option.get())
             # print(numbers)
             numbers = list(filter(lambda x: (( x % i == 0) if option.get() else (not x % i==0)), numbers))
-        i += 1
-        d+=10
+            i += 1
+        else:
+            i+=1
+            d+=10
     print(f'Your number is {numbers[0]}!')
     text.config(text=f'Your number is {numbers[0]}!')
     
