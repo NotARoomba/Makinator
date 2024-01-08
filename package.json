@@ -13,6 +13,8 @@
     "eslint-config-prettier": "^9.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropdown": "^1.11.0",
+    "react-feather": "^2.0.10",
     "react-router-dom": "^6.21.1"
   },
   "devDependencies": {

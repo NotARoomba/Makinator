@@ -10,7 +10,7 @@ export default function NavBar() {
   };
 
   return (
-    <div className="flex w-screen mx-auto shadow-lg h-20 dark:bg-background border-b border-text-400">
+    <div className="flex w-screen mx-auto shadow-lg h-20 dark:bg-background border-b-2 border-background-800">
       <div className="w-1/2">
         <Link
           to="/"
@@ -53,7 +53,7 @@ export default function NavBar() {
         </div>
 
         <div className="justify-left hidden lg:flex text-lg text-gray gap-4 mx-4">
-          <NavButton route="/signup" text="Sign up" />
+          <NavButton route="/play" text="Play" />
           <NavButton route="/login" text="Login" />
         </div>
       </div>
@@ -64,7 +64,7 @@ export default function NavBar() {
           (menu ? " animate-show" : " animate-hide hidden")
         }
       >
-        <NavButton route="/signup" text="Sign up" />
+        <NavButton route="/play" text="Play" />
         <NavButton route="/login" text="Login" />
         {/* <ThemeButton theme={theme} changeTheme={changeTheme}  /> */}
       </div>
