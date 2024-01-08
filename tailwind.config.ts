@@ -90,6 +90,18 @@ export default {
           "0%": { opacity: "100" },
           "100%": { opacity: "0", display: "none" },
         },
+        lettersAnimation: {
+          "0%": {
+            transform: "translateY(0) rotate(0deg)",
+            opacity: "1",
+            borderRadius: "0",
+          },
+          "100%": {
+            transform: "translateY(-1000%) rotate(720deg)",
+            opacity: "0",
+            borderRadius: "50%",
+          },
+        },
       },
       backgroundSize: {
         "300%": "300%",
@@ -98,6 +110,7 @@ export default {
         gradient: "animatedgradient 6s ease infinite alternate",
         show: "show 300ms ease forwards",
         hide: "hide 300ms ease forwards",
+        animatedLetters: "lettersAnimation 25s linear infinite",
       },
     },
   },

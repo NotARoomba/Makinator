@@ -6,6 +6,7 @@ import "./css/index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./tsx/components/NavBar.tsx";
 import Play from "./tsx/pages/Play.tsx";
+import Guess from "./tsx/pages/Guess.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -14,6 +15,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<Home />} errorElement={<Error />} />
         <Route path="/play" element={<Play />} errorElement={<Error />} />
+        <Route
+          path="/play/guess"
+          element={<Guess />}
+          errorElement={<Error />}
+        />
         <Route path="*" element={<Error />} />
       </Routes>
     </BrowserRouter>

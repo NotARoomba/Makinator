@@ -10,7 +10,7 @@ export default function NavBar() {
   };
 
   return (
-    <div className="flex w-screen mx-auto shadow-lg h-20 dark:bg-background border-b-2 border-background-800">
+    <div className="flex w-screen mx-auto shadow-lg h-20  bg-background border-b-2 border-background-800 z-20">
       <div className="w-1/2">
         <Link
           to="/"
@@ -19,10 +19,10 @@ export default function NavBar() {
           <div className="group flex align-middle my-auto">
             <img src="/img/logo.png" className="h-14 m-2 rounded-xl" />
             <div className="flex my-auto  flex-col justify-center align-middle max-w-fit">
-              <p className="text-left m-4 mb-0 text-4xl font-bold bg-gray dark:bg-gradient-to-r from-text to-text bg-clip-text text-transparent">
+              <p className="text-left m-4 mb-0 text-4xl font-bold bg-gray bg-gradient-to-r from-text to-text bg-clip-text text-transparent">
                 Makinator
               </p>
-              <hr className="bg-gradient-to-r from-gray-50 to-gray-800 dark:from-primary dark:to-accent max-w-0 group-hover:max-w-full transition-all duration-500 h-1 border-none rounded-xl mb-4" />
+              <hr className="bg-gradient-to-r from-primary to-accent max-w-0 group-hover:max-w-full transition-all duration-500 h-1 border-none rounded-xl mb-4" />
             </div>
           </div>
         </Link>
