@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           errorElement={<Error />}
         />
         <Route path="/login" element={<Login />} errorElement={<Error />} />
-        <Route path="/login" element={<Signup />} errorElement={<Error />} />
+        <Route path="/signup" element={<Signup />} errorElement={<Error />} />
 
         <Route path="*" element={<Error />} />
       </Routes>

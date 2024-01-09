@@ -39,19 +39,19 @@ export default function Guess() {
     else if (input == "") return setErrModal(true);
     else {
       const inputNumber = parseInt(input);
-      if (type == GuessTypes.DIVISIBLE || GuessTypes.MULTIPLE)
+      if (type == GuessTypes.DIVISIBLE || type == GuessTypes.MULTIPLE)
         predicate = number % inputNumber == 0;
       else if (type == GuessTypes.FACTORS)
         predicate = getFactors(number) == inputNumber;
-      else if (type == GuessTypes.LESSTHAN)
-        predicate = (number < inputNumber);
-      else if (type == GuessTypes.GREATERTHAN)
-        predicate = (number > inputNumber);
-      console.log(number, inputNumber, number < inputNumber, number > inputNumber)
+      else if (type == GuessTypes.LESSTHAN) predicate = number < inputNumber;
+      else if (type == GuessTypes.GREATERTHAN) predicate = number > inputNumber;
     }
-    console.log(predicate, type)
-    const guess = `The number is ${predicate ? "" : "not"} ${type.split("the number")[1].replace("?", "").replace("x", input)}`
-    if (!guesses.map(v => v.guessString).includes(guess)) setGuesses([...guesses, { guessType: type, guessString: guess }]);
+    const guess = `The number is ${predicate ? "" : "not"} ${type
+      .split("the number")[1]
+      .replace("?", "")
+      .replace("x", input)}`;
+    if (!guesses.map((v) => v.guessString).includes(guess))
+      setGuesses([...guesses, { guessType: type, guessString: guess }]);
   };
   const onSubmit = () => {
     if (inputValue === "") setErrModal(true);
@@ -59,22 +59,28 @@ export default function Guess() {
       setWrongGuess(true);
       setTimeout(() => setWrongGuess(false), 1000);
       setLives(lives - 1);
+      if (lives <= 0) setLives(0);
+      if (lives == 0) setGameOver(true);
     } else {
       setGameOver(true);
     }
   };
   const calculateScore = () => {
-    return Math.round(-1 + 10001 / (10001 ** ((time * guesses.length * lives) / 7200)));
+    return Math.round(
+      (-1 + 10001 / 10001 ** ((time * guesses.length * lives) / 7200)) *
+        (lives == 0 ? 0 : 1),
+    );
   };
   useEffect(() => {
-    const interval = setInterval(() => setTime(time + 1), 1000);
-    if (gameOver) clearInterval(interval);
-    return () => clearInterval(interval);
+    if (!gameOver) {
+      const interval = setInterval(() => setTime(time + 1), 1000);
+      return () => clearInterval(interval);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [time]);
+  }, [time, gameOver]);
   useEffect(() => {
-    if (lives == 0) {
-      //save to localstoer array or online if have acc
+    //save to localstoer array or online if have acc
+    if (gameOver) {
       const prevGames = JSON.parse(
         localStorage.getItem("guessStatistics") ?? "[]",
       );
@@ -104,10 +110,9 @@ export default function Guess() {
           ]),
         );
       }
-      setGameOver(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lives]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameOver]);
   // there will be options such as is number divisible by x or is number multiple of x or is even or is it a prime number or if number has exactly x factors
   return (
     <div className="bg-transparent text-text min-h-[calc(100vh-80px)] my-auto flex flex-col">
@@ -169,7 +174,7 @@ export default function Guess() {
           {Object.values(GuessTypes)
             .filter((x) =>
               x == GuessTypes.ISEVEN || x == GuessTypes.ISPRIME
-                ? !guesses.map((v) => v.guessType).includes(x) 
+                ? !guesses.map((v) => v.guessType).includes(x)
                 : x,
             )
             .map((v, i) => (

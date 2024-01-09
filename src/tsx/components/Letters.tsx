@@ -7,16 +7,28 @@ export default function Letters() {
   useLayoutEffect(() => {
     function updateSize() {
       const body = document.body,
-    html = document.documentElement;
-      setHeight(Math.max( body.scrollHeight, body.offsetHeight, 
-        html.clientHeight, html.scrollHeight, html.offsetHeight ));
+        html = document.documentElement;
+      setHeight(
+        Math.max(
+          body.scrollHeight,
+          body.offsetHeight,
+          html.clientHeight,
+          html.scrollHeight,
+          html.offsetHeight,
+        ),
+      );
     }
-    window.addEventListener('resize', updateSize);
+    window.addEventListener("resize", updateSize);
     updateSize();
-    return () => window.removeEventListener('resize', updateSize);
+    return () => window.removeEventListener("resize", updateSize);
   }, []);
   return (
-    <ul className={"absolute m-0 top-0 left-0 overflow-x-hidden overflow-y-hidden w-full -z-10 bg-background"} style={{height: `${height}px`}}>
+    <ul
+      className={
+        "absolute m-0 top-0 left-0 overflow-x-hidden overflow-y-hidden w-full -z-10 bg-background"
+      }
+      style={{ height: `${height}px` }}
+    >
       {[...Array(50)].map((_v, i) => {
         const wh = Math.floor(Math.random() * 131) + 60;
         return (

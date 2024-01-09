@@ -54,6 +54,7 @@ export interface LinkButtonProps {
   text: string;
   route?: string;
   action?: () => void;
+  disabled?: boolean;
 }
 
 export enum STATUS_CODES {
@@ -65,9 +66,18 @@ export enum STATUS_CODES {
   SENT_CODE,
   EMAIL_NOT_EXIST,
   ERROR_SENDING_CODE,
-  TOO_MANY_ATTEMPTS,
   CODE_DENIED,
   CODE_EXPIRED,
   CODE_FAILED,
   NO_CONNECTION,
+  EMAIL_IN_USE,
+  USERNAME_IN_USE,
+  NONE_IN_USE,
+}
+
+export interface VerificationModalProps {
+  email: string;
+  isOpen: boolean;
+  setOpen: (o: boolean) => void;
+  action: (v: boolean) => void;
 }
