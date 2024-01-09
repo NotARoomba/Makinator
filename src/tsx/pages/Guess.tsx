@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import AlertModal from "../components/AlertModal";
-import { AlertTypes, GuessList, GuessTypes } from "../utils/Types";
+import { AlertTypes, GuessList, GuessStatistics, GuessTypes } from "../utils/Types";
 import GuessBar from "../components/GuessBar";
 import { getFactors, isPrime } from "../utils/Functions";
+import ResultsModal from "../components/ResultsModal";
 
 export default function Guess() {
   // robot thinks of a number and the user tries to guess it using clues
@@ -10,7 +11,10 @@ export default function Guess() {
   const [lives, setLives] = useState(3);
   const [guesses, setGuesses] = useState<GuessList[]>([]);
   const [inputValue, setInputValue] = useState("");
-  const [modal, setModal] = useState(false);
+  const [errModal, setErrModal] = useState(false);
+  const [wrongGuess, setWrongGuess] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
+  const [time, setTime] = useState(0);
   useEffect(() => {
     setNumber(Math.floor(Math.random() * 100) + 1);
     setGuesses([])
@@ -32,7 +36,7 @@ export default function Guess() {
       guess = `The number is ${isPrime(number) ? "" : "not"} ${guess}`;
       setGuesses([...guesses, { guessType: type, guessString: guess }]);
     } else if (input == "") {
-      setModal(true);
+      setErrModal(true);
     } else {
       const inputNumber = parseInt(input);
       if (type == GuessTypes.DIVISIBLE || GuessTypes.MULTIPLE)
@@ -54,18 +58,42 @@ export default function Guess() {
     }
   };
   const onSubmit = () => {
-    if (inputValue === "") {
-      setModal(true);
+    if (inputValue === "") setErrModal(true);
+    else if (parseInt(inputValue) != number) {
+      setWrongGuess(true)
+      setTimeout(() => setWrongGuess(false), 1000)
+      setLives(lives-1)
     }
   };
+  const calculateScore = () => {
+    return (time*10) + (guesses.length*100) * (lives * 1000)
+  }
+  useEffect(() => {
+    const interval = setInterval(() => setTime(time+1), 1000)
+    return () => clearInterval(interval)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [time])
+  useEffect(() => {
+    if (lives == 0) {
+      //save to localstoer array or online if have acc
+      const prevGames = localStorage.getItem("guessStatistics");
+      if (prevGames == null) {
+        localStorage.setItem("guessStatistics", JSON.stringify([{time, guesses: guesses.length, lives} as GuessStatistics]))
+      } else {
+        localStorage.setItem("guessStatistics", JSON.stringify([...prevGames, {time, guesses: guesses.length, lives} as GuessStatistics]))
+      }
+      setGameOver(true)
+    }
+  }, [lives])
   // there will be options such as is number divisible by x or is number multiple of x or is even or is it a prime number or if number has exactly x factors
   return (
     <div className="bg-background text-text min-h-[calc(100vh-80px)] my-auto flex flex-col">
       <div className="mx-auto justify-center w-full align-middle text-center">
-        <p className="text-4xl my-4 mb-0 font-semibold">Guess the Number</p>
+        <p className="text-4xl mb-0 font-semibold">Guess the Number</p>
         <p className="text-xl">
           Guess a number from 1-100 using the questions provided!
         </p>
+        <p className="font-bold text-4xl text-secondary ">{new Date(time * 1000).toISOString().slice(11, 19)}</p>
       </div>
       <div className="flex w-screen text-center">
         <div className="w-1/3">
@@ -77,7 +105,7 @@ export default function Guess() {
             type="text"
             value={inputValue}
             onChange={inputNumber}
-            className="mx-auto bg-transparent text-center w-28 text-6xl outline rounded-xl outline-secondary"
+            className={"mx-auto bg-transparent text-center w-28 text-6xl outline rounded-xl outline-secondary" + (wrongGuess ? ' animate-shake' : '')}
             maxLength={3}
           />
           <button
@@ -121,12 +149,13 @@ export default function Guess() {
             ))}
         </div>
       </div>
+      <ResultsModal game="guess" statistics={{time, guesses: guesses.length, lives}} isOpen={gameOver} />
       <AlertModal
         status={AlertTypes.ERROR}
         title={"Error"}
         text={"Enter a number!"}
-        isOpen={modal}
-        setIsOpen={setModal}
+        isOpen={errModal}
+        setIsOpen={setErrModal}
       />
     </div>
   );

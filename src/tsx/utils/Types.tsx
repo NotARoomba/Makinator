@@ -35,3 +35,16 @@ export interface GuessList {
   guessType: GuessTypes;
   guessString: string;
 }
+
+export interface GuessStatistics {
+  time: number; //in s
+  guesses: number;
+  lives: number
+}
+
+export interface ResultsModalProps {
+  game: string;
+  statistics: GuessStatistics;
+  highscore: GuessStatistics;
+  isOpen: boolean;
+}
