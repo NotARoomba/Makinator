@@ -1,4 +1,4 @@
-import Letters from "../components/Letters";
+
 
 export default function Home() {
   return (
@@ -11,7 +11,6 @@ export default function Home() {
       <div className="w-1/2 my-auto z-20">
         <img className="my-auto" src="/img/logo.png" />
       </div>
-      <Letters />
     </div>
   );
 }

@@ -39,7 +39,8 @@ export interface GuessList {
 export interface GuessStatistics {
   time: number; //in s
   guesses: number;
-  lives: number
+  lives: number;
+  score: number;
 }
 
 export interface ResultsModalProps {
@@ -47,4 +48,26 @@ export interface ResultsModalProps {
   statistics: GuessStatistics;
   highscore: GuessStatistics;
   isOpen: boolean;
+}
+
+export interface LinkButtonProps {
+  text: string;
+  route?: string;
+  action?: () => void;
+}
+
+export enum STATUS_CODES {
+  SUCCESS,
+  GENERIC_ERROR,
+  USER_NOT_FOUND,
+  INVALID_EMAIL,
+  INVALID_SERVICE,
+  SENT_CODE,
+  EMAIL_NOT_EXIST,
+  ERROR_SENDING_CODE,
+  TOO_MANY_ATTEMPTS,
+  CODE_DENIED,
+  CODE_EXPIRED,
+  CODE_FAILED,
+  NO_CONNECTION,
 }

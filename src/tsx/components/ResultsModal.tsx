@@ -1,14 +1,15 @@
 import Modal from "react-modal";
 
 import { ResultsModalProps } from "../utils/Types";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import LinkButton from "./LinkButton";
 
 export default function ResultsModal({
   statistics,
   highscore,
   isOpen,
 }: ResultsModalProps) {
-const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Modal
       isOpen={isOpen}
@@ -24,33 +25,42 @@ const navigate = useNavigate()
     >
       <div className="w-full h-full flex flex-col text-center">
         <p className="text-6xl font-bold mt-2">Game Over</p>
-        <p className="text-2xl ">You {statistics.lives == 0 ? 'did not': 'did'} guess the number!</p>
-        <div className="flex text-center justify-center">
-            <div className="w-1/3">
-                <p className=" text-xl font-bold">High Score</p>
-            </div>
-            <div className="w-1/6">
-
-            </div>
-            <div className="w-1/3 ">
+        <p className="text-2xl ">
+          You {statistics.lives == 0 ? "did not" : "did"} guess the number!
+        </p>
+        <div className="flex text-center justify-center text-lg my-2">
+          <div className="w-1/3 font-bold">
+            <p className=" text-xl ">High Score</p>
+            <p>{highscore.time}</p>
+            <p>{highscore.score}</p>
+            <p>{highscore.lives}</p>
+            <p>{highscore.guesses}</p>
+          </div>
+          <div className="w-1/6 font-bold text-secondary">
+            <p className=" text-xl text-text ">________</p>
+            <p>Time</p>
+            <p>Score</p>
+            <p>Lives</p>
+            <p>Guesses</p>
+          </div>
+          <div className="w-1/3 font-semibold ">
             <p className=" text-xl font-bold">Your Score</p>
-
-            </div>
+            <p>{statistics.time}</p>
+            <p>{statistics.score}</p>
+            <p>{statistics.lives}</p>
+            <p>{statistics.guesses}</p>
+          </div>
+        </div>
+        <div className="flex text-xl font-bold justify-center text-center px-10 mx-auto flex-col">
+          <p>Login or sign up to view your score on the global leaderboard!</p>
+          <div className="flex justify-center">
+            <LinkButton text="Login" route="/login" />
+            <LinkButton text="Sign up" route="/signup" />
+          </div>
         </div>
         <div className="flex">
-            <Link
-            to="/"
-            className="px-4 w-36 mt-4 rounded-xl hover:bg-primary-500 bg-primary hover:shadow-md transition-all duration-300 text-2xl py-2 mx-auto"
-            >
-            Home
-            </Link>
-            <button
-            onClick={() => navigate(0)}
-            className="px-4 w-36 mt-4 rounded-xl hover:bg-primary-500 bg-primary hover:shadow-md transition-all duration-300 text-2xl py-2 mx-auto"
-            >
-            Play Again
-            </button>
-
+          <LinkButton text="Home" route="/" />
+          <LinkButton text="Play Again" action={() => navigate(0)} />
         </div>
       </div>
     </Modal>

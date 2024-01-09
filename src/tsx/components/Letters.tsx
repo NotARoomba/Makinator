@@ -1,8 +1,22 @@
+import { useState, useLayoutEffect } from "react";
+
 export default function Letters() {
   const letters = [..."/?<>⋅=+÷^*!±√Δ∞∑φπ∏∝∫"];
   const colors = ["#5435cb", "#7499fd", "#D7263D", "#1B998B"];
+  const [height, setHeight] = useState(0);
+  useLayoutEffect(() => {
+    function updateSize() {
+      const body = document.body,
+    html = document.documentElement;
+      setHeight(Math.max( body.scrollHeight, body.offsetHeight, 
+        html.clientHeight, html.scrollHeight, html.offsetHeight ));
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
   return (
-    <ul className="absolute m-0 top-0 left-0 overflow-x-hidden overflow-y-hidden w-full h-full -z-10 bg-background">
+    <ul className={"absolute m-0 top-0 left-0 overflow-x-hidden overflow-y-hidden w-full -z-10 bg-background"} style={{height: `${height}px`}}>
       {[...Array(50)].map((_v, i) => {
         const wh = Math.floor(Math.random() * 131) + 60;
         return (

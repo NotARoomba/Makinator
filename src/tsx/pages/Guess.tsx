@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import AlertModal from "../components/AlertModal";
-import { AlertTypes, GuessList, GuessStatistics, GuessTypes } from "../utils/Types";
+import {
+  AlertTypes,
+  GuessList,
+  GuessStatistics,
+  GuessTypes,
+} from "../utils/Types";
 import GuessBar from "../components/GuessBar";
 import { getFactors, isPrime } from "../utils/Functions";
 import ResultsModal from "../components/ResultsModal";
@@ -17,7 +22,7 @@ export default function Guess() {
   const [time, setTime] = useState(0);
   useEffect(() => {
     setNumber(Math.floor(Math.random() * 100) + 1);
-    setGuesses([])
+    setGuesses([]);
     setLives(3);
   }, []);
   const inputNumber = (input: React.FormEvent<HTMLInputElement>) => {
@@ -28,72 +33,92 @@ export default function Guess() {
   };
   const addGuess = (type: GuessTypes, input: string) => {
     console.log(type, input, number);
-    let guess: string = type.split("the number")[1].replace("?", "");
-    if (type == GuessTypes.ISEVEN) {
-      guess = `The number is ${number % 2 == 0 ? "" : "not"} ${guess}`;
-      setGuesses([...guesses, { guessType: type, guessString: guess }]);
-    } else if (type == GuessTypes.ISPRIME) {
-      guess = `The number is ${isPrime(number) ? "" : "not"} ${guess}`;
-      setGuesses([...guesses, { guessType: type, guessString: guess }]);
-    } else if (input == "") {
-      setErrModal(true);
-    } else {
+    let predicate: boolean = true;
+    if (type == GuessTypes.ISEVEN) predicate = number % 2 == 0;
+    else if (type == GuessTypes.ISPRIME) predicate = isPrime(number);
+    else if (input == "") return setErrModal(true);
+    else {
       const inputNumber = parseInt(input);
       if (type == GuessTypes.DIVISIBLE || GuessTypes.MULTIPLE)
-        guess = `The number is ${
-          number % inputNumber == 0 ? "" : "not"
-        } ${guess.replace("x", input)}`;
+        predicate = number % inputNumber == 0;
       else if (type == GuessTypes.FACTORS)
-        guess = `The number is ${
-          getFactors(number) == inputNumber ? "" : "not"
-        } ${guess.replace("x", input)}`;
-      else
-        guess = `The number is ${
-          (number < inputNumber && type == GuessTypes.LESSTHAN) ||
-          (number > inputNumber && type == GuessTypes.GREATERTHAN)
-            ? ""
-            : "not"
-        } ${guess.replace("x", input)}`;
-      setGuesses([...guesses, { guessType: type, guessString: guess }]);
+        predicate = getFactors(number) == inputNumber;
+      else if (type == GuessTypes.LESSTHAN)
+        predicate = (number < inputNumber);
+      else if (type == GuessTypes.GREATERTHAN)
+        predicate = (number > inputNumber);
+      console.log(number, inputNumber, number < inputNumber, number > inputNumber)
     }
+    console.log(predicate, type)
+    const guess = `The number is ${predicate ? "" : "not"} ${type.split("the number")[1].replace("?", "").replace("x", input)}`
+    if (!guesses.map(v => v.guessString).includes(guess)) setGuesses([...guesses, { guessType: type, guessString: guess }]);
   };
   const onSubmit = () => {
     if (inputValue === "") setErrModal(true);
     else if (parseInt(inputValue) != number) {
-      setWrongGuess(true)
-      setTimeout(() => setWrongGuess(false), 1000)
-      setLives(lives-1)
+      setWrongGuess(true);
+      setTimeout(() => setWrongGuess(false), 1000);
+      setLives(lives - 1);
+    } else {
+      setGameOver(true);
     }
   };
   const calculateScore = () => {
-    return (time*10) + (guesses.length*100) * (lives * 1000)
-  }
+    return Math.round(-1 + 10001 / (10001 ** ((time * guesses.length * lives) / 7200)));
+  };
   useEffect(() => {
-    const interval = setInterval(() => setTime(time+1), 1000)
-    return () => clearInterval(interval)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [time])
+    const interval = setInterval(() => setTime(time + 1), 1000);
+    if (gameOver) clearInterval(interval);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [time]);
   useEffect(() => {
     if (lives == 0) {
       //save to localstoer array or online if have acc
-      const prevGames = localStorage.getItem("guessStatistics");
+      const prevGames = JSON.parse(
+        localStorage.getItem("guessStatistics") ?? "[]",
+      );
       if (prevGames == null) {
-        localStorage.setItem("guessStatistics", JSON.stringify([{time, guesses: guesses.length, lives} as GuessStatistics]))
+        localStorage.setItem(
+          "guessStatistics",
+          JSON.stringify([
+            {
+              time,
+              guesses: guesses.length,
+              lives,
+              score: calculateScore(),
+            } as GuessStatistics,
+          ]),
+        );
       } else {
-        localStorage.setItem("guessStatistics", JSON.stringify([...prevGames, {time, guesses: guesses.length, lives} as GuessStatistics]))
+        localStorage.setItem(
+          "guessStatistics",
+          JSON.stringify([
+            ...prevGames,
+            {
+              time,
+              guesses: guesses.length,
+              lives,
+              score: calculateScore(),
+            } as GuessStatistics,
+          ]),
+        );
       }
-      setGameOver(true)
+      setGameOver(true);
     }
-  }, [lives])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lives]);
   // there will be options such as is number divisible by x or is number multiple of x or is even or is it a prime number or if number has exactly x factors
   return (
-    <div className="bg-background text-text min-h-[calc(100vh-80px)] my-auto flex flex-col">
+    <div className="bg-transparent text-text min-h-[calc(100vh-80px)] my-auto flex flex-col">
       <div className="mx-auto justify-center w-full align-middle text-center">
-        <p className="text-4xl mb-0 font-semibold">Guess the Number</p>
+        <p className="text-4xl mt-4 mb-0 font-semibold">Guess the Number</p>
         <p className="text-xl">
           Guess a number from 1-100 using the questions provided!
         </p>
-        <p className="font-bold text-4xl text-secondary ">{new Date(time * 1000).toISOString().slice(11, 19)}</p>
+        <p className="font-bold text-4xl text-secondary ">
+          {new Date(time * 1000).toISOString().slice(11, 19)}
+        </p>
       </div>
       <div className="flex w-screen text-center">
         <div className="w-1/3">
@@ -105,7 +130,10 @@ export default function Guess() {
             type="text"
             value={inputValue}
             onChange={inputNumber}
-            className={"mx-auto bg-transparent text-center w-28 text-6xl outline rounded-xl outline-secondary" + (wrongGuess ? ' animate-shake' : '')}
+            className={
+              "mx-auto bg-transparent text-center w-28 text-6xl outline rounded-xl outline-secondary" +
+              (wrongGuess ? " animate-shake" : "")
+            }
             maxLength={3}
           />
           <button
@@ -141,7 +169,7 @@ export default function Guess() {
           {Object.values(GuessTypes)
             .filter((x) =>
               x == GuessTypes.ISEVEN || x == GuessTypes.ISPRIME
-                ? !guesses.map((v) => v.guessType).includes(x)
+                ? !guesses.map((v) => v.guessType).includes(x) 
                 : x,
             )
             .map((v, i) => (
@@ -149,7 +177,30 @@ export default function Guess() {
             ))}
         </div>
       </div>
-      <ResultsModal game="guess" statistics={{time, guesses: guesses.length, lives}} isOpen={gameOver} />
+      <ResultsModal
+        game="guess"
+        statistics={{
+          time,
+          guesses: guesses.length,
+          lives,
+          score: calculateScore(),
+        }}
+        highscore={
+          (
+            JSON.parse(
+              localStorage.getItem("guessStatistics") ?? "[]",
+            ) as GuessStatistics[]
+          ).sort(
+            (a: GuessStatistics, b: GuessStatistics) => b.score - a.score,
+          )[0] ?? {
+            time,
+            guesses: guesses.length,
+            lives,
+            score: calculateScore(),
+          }
+        }
+        isOpen={gameOver}
+      />
       <AlertModal
         status={AlertTypes.ERROR}
         title={"Error"}

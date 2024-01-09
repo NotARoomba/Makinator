@@ -1,3 +1,6 @@
+import CryptoJS from 'crypto-es';
+import { STATUS_CODES } from './Types';
+
 export function isPrime(num: number) {
   for (let i = 2, s = Math.sqrt(num); i <= s; i++) {
     if (num % i === 0) return false;
@@ -11,4 +14,54 @@ export function getFactors(num: number) {
     if (Number.isInteger(num / i)) factors++;
   }
   return factors;
+}
+
+const API_URL = "https://api.notaroomba.dev"
+
+export async function callAPI(
+  endpoint: string,
+  method: string,
+  body: object = {},
+) {
+  const time = Date.now().toString();
+  const data = JSON.stringify(body);
+  const digest = CryptoJS.enc.Hex.stringify(
+    CryptoJS.HmacSHA256(
+      time + method + endpoint + CryptoJS.MD5(data).toString(),
+      CryptoJS.SHA256(Math.floor(Date.now() / (30 * 1000)).toString()).toString(),
+    ),
+  );
+  const hmac = `HMAC ${time}:${digest}`;
+  try {
+    return method === 'POST'
+      ? await (
+          await fetch(API_URL + endpoint, {
+            method: method,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: hmac,
+            },
+            body: JSON.stringify(body),
+          })
+        ).json()
+      : await (
+          await fetch(API_URL + endpoint, {
+            method: method,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: hmac,
+            },
+          })
+        ).json();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.log(error);
+    if (!error.response) return {status: STATUS_CODES.NO_CONNECTION};
+    // Alert.alert('Error!', 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.')
+    return {
+      status: STATUS_CODES.GENERIC_ERROR,
+    };
+  }
 }

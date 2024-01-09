@@ -1,4 +1,3 @@
-import Letters from "../components/Letters";
 import NavButton from "../components/NavButton";
 
 export default function Play() {
@@ -12,7 +11,6 @@ export default function Play() {
           <NavButton route="/play/online" text="Online Play" />
         </div>
       </div>
-      <Letters />
     </div>
   );
 }
