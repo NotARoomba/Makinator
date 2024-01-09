@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import AlertModal from "../components/AlertModal";
-import {
-  AlertTypes,
-  GuessList,
-  GuessTypes,
-} from "../utils/Types";
+import { AlertTypes, GuessList, GuessTypes } from "../utils/Types";
 import GuessBar from "../components/GuessBar";
 import { getFactors, isPrime } from "../utils/Functions";
 
@@ -17,7 +13,7 @@ export default function Guess() {
   const [modal, setModal] = useState(false);
   useEffect(() => {
     setNumber(Math.floor(Math.random() * 100) + 1);
-    // setGuesses([])
+    setGuesses([])
     setLives(3);
   }, []);
   const inputNumber = (input: React.FormEvent<HTMLInputElement>) => {
@@ -30,18 +26,31 @@ export default function Guess() {
     console.log(type, input, number);
     let guess: string = type.split("the number")[1].replace("?", "");
     if (type == GuessTypes.ISEVEN) {
-      guess = `The number is ${number % 2 == 0 ? '' : 'not'} ${guess}`;
+      guess = `The number is ${number % 2 == 0 ? "" : "not"} ${guess}`;
       setGuesses([...guesses, { guessType: type, guessString: guess }]);
     } else if (type == GuessTypes.ISPRIME) {
-        guess = `The number is ${isPrime(number) ? '' : 'not'} ${guess}`;
-        setGuesses([...guesses, { guessType: type, guessString: guess }]);
+      guess = `The number is ${isPrime(number) ? "" : "not"} ${guess}`;
+      setGuesses([...guesses, { guessType: type, guessString: guess }]);
     } else if (input == "") {
       setModal(true);
     } else {
-        const inputNumber = parseInt(input)
-        if (type == GuessTypes.DIVISIBLE || GuessTypes.MULTIPLE) guess = `The number is ${number % inputNumber == 0 ? '' : 'not'} ${guess}`;
-        else if (type == GuessTypes.FACTORS) guess = `The number is ${getFactors(number) == inputNumber ? '' : 'not'} ${guess}`;
-        setGuesses([...guesses, { guessType: type, guessString: guess }]);
+      const inputNumber = parseInt(input);
+      if (type == GuessTypes.DIVISIBLE || GuessTypes.MULTIPLE)
+        guess = `The number is ${
+          number % inputNumber == 0 ? "" : "not"
+        } ${guess.replace("x", input)}`;
+      else if (type == GuessTypes.FACTORS)
+        guess = `The number is ${
+          getFactors(number) == inputNumber ? "" : "not"
+        } ${guess.replace("x", input)}`;
+      else
+        guess = `The number is ${
+          (number < inputNumber && type == GuessTypes.LESSTHAN) ||
+          (number > inputNumber && type == GuessTypes.GREATERTHAN)
+            ? ""
+            : "not"
+        } ${guess.replace("x", input)}`;
+      setGuesses([...guesses, { guessType: type, guessString: guess }]);
     }
   };
   const onSubmit = () => {
@@ -103,7 +112,9 @@ export default function Guess() {
         <div className="flex gap-8 justify-center mx-auto my-4 flex-wrap gap-y-4">
           {Object.values(GuessTypes)
             .filter((x) =>
-              (x== GuessTypes.ISEVEN || x==GuessTypes.ISPRIME) ?  !guesses.map((v) => v.guessType).includes(x) : x
+              x == GuessTypes.ISEVEN || x == GuessTypes.ISPRIME
+                ? !guesses.map((v) => v.guessType).includes(x)
+                : x,
             )
             .map((v, i) => (
               <GuessBar key={i} guessType={v} onClick={addGuess} />
