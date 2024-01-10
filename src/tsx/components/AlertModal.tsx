@@ -24,12 +24,20 @@ export default function AlertModal({
       closeTimeoutMS={300}
     >
       <div className="w-full h-full flex flex-col">
-        {title.toLocaleLowerCase() == 'error' ? (
+        {title.toLocaleLowerCase() == "error" ? (
           <XCircle size={100} className="mx-auto mt-8 mb-4" color="#D7263D" />
-        ) : title.toLocaleLowerCase() == 'warning' ? (
-          <AlertCircle size={100} className="mx-auto mt-8 mb-4" color="#F46036" />
+        ) : title.toLocaleLowerCase() == "warning" ? (
+          <AlertCircle
+            size={100}
+            className="mx-auto mt-8 mb-4"
+            color="#F46036"
+          />
         ) : (
-          <CheckCircle size={100} className="mx-auto mt-8 mb-4" color="#1B998B" />
+          <CheckCircle
+            size={100}
+            className="mx-auto mt-8 mb-4"
+            color="#1B998B"
+          />
         )}
         <p className="text-4xl mx-auto font-bold">{title}</p>
         <p className="text-xl mx-auto px-2 text-center">{text}</p>

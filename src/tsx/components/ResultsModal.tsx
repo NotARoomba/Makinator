@@ -8,16 +8,16 @@ export default function ResultsModal({
   statistics,
   highscore,
   isOpen,
-  setIsOpen
+  setIsOpen,
 }: ResultsModalProps) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Modal
       ariaHideApp={false}
       isOpen={isOpen}
       className={
         " w-2/6 min-w-96 pb-8 rounded-xl bg-background text-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " +
-        (isOpen ? "animate-show" : "animate-hide") 
+        (isOpen ? "animate-show" : "animate-hide")
       }
       overlayClassName={
         "bg-text-800/80 absolute w-screen h-screen top-0 left-0 " +
@@ -68,14 +68,22 @@ export default function ResultsModal({
             <p>{statistics.guesses}</p>
           </div>
         </div>
-        {!localStorage.getItem("userID") ?<div className="flex text-xl font-bold justify-center text-center px-10 mx-auto flex-col">
-          <p>Login or sign up to view your score on the global leaderboard!</p>
-          <div className="flex justify-center">
-            <LinkButton text="Login" route="/login" />
-            <LinkButton text="Sign up" route="/signup" />
+        {!localStorage.getItem("userID") ? (
+          <div className="flex text-xl font-bold justify-center text-center px-10 mx-auto flex-col">
+            <p>
+              Login or sign up to view your score on the global leaderboard!
+            </p>
+            <div className="flex justify-center">
+              <LinkButton text="Login" route="/login" />
+              <LinkButton text="Sign up" route="/signup" />
+            </div>
           </div>
-        </div> : <div className="flex justify-center font-bold text-xl"><LinkButton text="Play Again" action={() => navigate(0)} />
-            <LinkButton text="Leaderboard" route="/leaderboard" /></div>}
+        ) : (
+          <div className="flex justify-center font-bold text-xl">
+            <LinkButton text="Play Again" action={() => navigate(0)} />
+            <LinkButton text="Leaderboard" route="/leaderboard" />
+          </div>
+        )}
         <div className="flex">
           <LinkButton text="Close" action={() => setIsOpen(!isOpen)} />
         </div>

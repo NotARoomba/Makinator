@@ -18,7 +18,7 @@ export default function VerificationModal({
   };
   return (
     <Modal
-        ariaHideApp={false}
+      ariaHideApp={false}
       isOpen={isOpen}
       className={
         " w-3/12 p-10 rounded-xl h-1/3 min-h-80 min-w-80 bg-background text-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " +

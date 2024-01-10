@@ -2,25 +2,28 @@ import { Link } from "react-router-dom";
 import NavButton from "./NavButton";
 import { useRef, useState } from "react";
 
-export default function NavBar() {
+export default function Navbar() {
   const [menu, setM] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const setMenu = (value: boolean) => {
     setM(value);
-    if (!value) setTimeout(() => {if (menuRef.current) menuRef.current.style.display = "none"}, 300)
-    else if (menuRef.current && value) menuRef.current.style.display = "flex"
+    if (!value)
+      setTimeout(() => {
+        if (menuRef.current) menuRef.current.style.display = "none";
+      }, 300);
+    else if (menuRef.current && value) menuRef.current.style.display = "flex";
     document.body.style.overflowY = value ? "hidden" : "auto";
   };
 
   return (
-    <div className="flex w-screen mx-auto shadow-lg h-20  bg-background border-b-2 border-background-800 z-20">
+    <div className="flex w-screen mx-auto shadow-lg h-20  bg-background border-b-2 border-background-800 z-20 absolute top-0 left-0">
       <div className="w-1/2">
         <Link
           to="/"
           className=" justify-left flex align-middle transition w-fit"
         >
           <div className="group flex align-middle my-auto">
-            <img src="/img/logo.png" className="h-14 m-2 rounded-xl" />
+            <img src="/logo.png" className="h-14 m-2 rounded-xl" />
             <div className="flex my-auto  flex-col justify-center align-middle max-w-fit">
               <p className="text-left m-4 mb-0 text-4xl font-bold bg-gray bg-gradient-to-r from-text to-text bg-clip-text text-transparent">
                 Makinator
@@ -57,7 +60,11 @@ export default function NavBar() {
 
         <div className="justify-left hidden lg:flex text-lg text-gray gap-4 mx-4">
           <NavButton route="/play" text="Play" />
-          {localStorage.getItem("userID") ? <NavButton route="/profile" text="Profile" /> : <NavButton route="/login" text="Login" />}
+          {localStorage.getItem("userID") ? (
+            <NavButton route="/profile" text="Profile" />
+          ) : (
+            <NavButton route="/login" text="Login" />
+          )}
         </div>
       </div>
       <div
@@ -69,7 +76,11 @@ export default function NavBar() {
         }
       >
         <NavButton route="/play" text="Play" />
-        {localStorage.getItem("userID") ? <NavButton route="/profile" text="Profile" /> : <NavButton route="/login" text="Login" />}
+        {localStorage.getItem("userID") ? (
+          <NavButton route="/profile" text="Profile" />
+        ) : (
+          <NavButton route="/login" text="Login" />
+        )}
         {/* <ThemeButton theme={theme} changeTheme={changeTheme}  /> */}
       </div>
     </div>
