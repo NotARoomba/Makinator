@@ -1,10 +1,9 @@
 import Modal from "react-modal";
 
-import { AlertModalProps, AlertTypes } from "../utils/Types";
+import { AlertModalProps } from "../utils/Types";
 import { AlertCircle, CheckCircle, XCircle } from "react-feather";
 
 export default function AlertModal({
-  status,
   title,
   text,
   isOpen,
@@ -24,12 +23,12 @@ export default function AlertModal({
       closeTimeoutMS={300}
     >
       <div className="w-full h-full flex flex-col">
-        {status == AlertTypes.ERROR ? (
+        {title.toLocaleLowerCase() == 'error' ? (
           <XCircle size={100} className="mx-auto mt-8 mb-4" color="#D7263D" />
-        ) : status == AlertTypes.WARNING ? (
-          <AlertCircle size={100} />
+        ) : title.toLocaleLowerCase() == 'warning' ? (
+          <AlertCircle size={100} className="mx-auto mt-8 mb-4" color="#F46036" />
         ) : (
-          <CheckCircle />
+          <CheckCircle size={100} className="mx-auto mt-8 mb-4" color="#1B998B" />
         )}
         <p className="text-4xl mx-auto font-bold">{title}</p>
         <p className="text-xl mx-auto">{text}</p>

@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
 import NavButton from "./NavButton";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function NavBar() {
   const [menu, setM] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const setMenu = (value: boolean) => {
     setM(value);
+    if (!value) setTimeout(() => {if (menuRef.current) menuRef.current.style.display = "none"}, 300)
+    else if (menuRef.current && value) menuRef.current.style.display = "flex"
     document.body.style.overflowY = value ? "hidden" : "auto";
   };
 
@@ -54,18 +57,19 @@ export default function NavBar() {
 
         <div className="justify-left hidden lg:flex text-lg text-gray gap-4 mx-4">
           <NavButton route="/play" text="Play" />
-          <NavButton route="/login" text="Login" />
+          {localStorage.getItem("userID") ? <NavButton route="/profile" text="Profile" /> : <NavButton route="/login" text="Login" />}
         </div>
       </div>
       <div
         onClick={() => setMenu(false)}
+        ref={menuRef}
         className={
-          " bg-white/80 dark:bg-primary/80 w-3/5 absolute h-fit top-20 z-10 justify-center transition duration-300 flex flex-wrap" +
+          " bg-white/80 dark:bg-primary/20 w-full absolute mx-auto h-fit top-20 z-30 justify-center flex-wrap transition duration-300" +
           (menu ? " animate-show" : " animate-hide hidden")
         }
       >
         <NavButton route="/play" text="Play" />
-        <NavButton route="/login" text="Login" />
+        {localStorage.getItem("userID") ? <NavButton route="/profile" text="Profile" /> : <NavButton route="/login" text="Login" />}
         {/* <ThemeButton theme={theme} changeTheme={changeTheme}  /> */}
       </div>
     </div>

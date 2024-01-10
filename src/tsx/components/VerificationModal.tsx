@@ -40,7 +40,7 @@ export default function VerificationModal({
           onChange={(e) => setCode(e.currentTarget.value)}
           className="mx-auto my-2 mt-5 bg-transparent text-center outline rounded outline-primary"
         />
-        <div className="flex">
+        <div className="flex gap-2">
           <LinkButton text="Cancel" action={() => setOpen(false)} />
           <LinkButton text="Submit" action={verifyCode} />
         </div>

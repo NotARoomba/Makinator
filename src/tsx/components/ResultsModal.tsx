@@ -8,20 +8,15 @@ export default function ResultsModal({
   statistics,
   highscore,
   isOpen,
+  setIsOpen
 }: ResultsModalProps) {
-  const navigate = useNavigate();
-  const colors = [
-    "text-text",
-    "text-[#7499fd]",
-    "text-[#D7263D]",
-    "text-[#1B998B]",
-  ];
+  const navigate = useNavigate()
   return (
     <Modal
       isOpen={isOpen}
       className={
-        " w-2/6 rounded-xl h-2/3 min-h-80 min-w-80 bg-accent text-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " +
-        (isOpen ? "animate-show" : "animate-hide")
+        " w-2/6 min-w-96 pb-8 rounded-xl bg-background text-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " +
+        (isOpen ? "animate-show" : "animate-hide") 
       }
       overlayClassName={
         "bg-text-800/80 absolute w-screen h-screen top-0 left-0 " +
@@ -56,7 +51,7 @@ export default function ResultsModal({
             <p>{highscore.guesses}</p>
           </div>
           <div className="w-1/6 font-bold text-secondary-300">
-            <p className=" text-xl text-text text-center ">────────</p>
+            <p className=" text-xl text-text text-center ">_</p>
             <p>Time</p>
             <p>Score</p>
             <p>Lives</p>
@@ -72,16 +67,16 @@ export default function ResultsModal({
             <p>{statistics.guesses}</p>
           </div>
         </div>
-        <div className="flex text-xl font-bold justify-center text-center px-10 mx-auto flex-col">
+        {!localStorage.getItem("userID") ?<div className="flex text-xl font-bold justify-center text-center px-10 mx-auto flex-col">
           <p>Login or sign up to view your score on the global leaderboard!</p>
           <div className="flex justify-center">
             <LinkButton text="Login" route="/login" />
             <LinkButton text="Sign up" route="/signup" />
           </div>
-        </div>
+        </div> : <div className="flex justify-center font-bold text-xl"><LinkButton text="Play Again" action={() => navigate(0)} />
+            <LinkButton text="Leaderboard" route="/leaderboard" /></div>}
         <div className="flex">
-          <LinkButton text="Home" route="/" />
-          <LinkButton text="Play Again" action={() => navigate(0)} />
+          <LinkButton text="Close" action={() => setIsOpen(!isOpen)} />
         </div>
       </div>
     </Modal>

@@ -4,6 +4,7 @@ import { callAPI } from "../utils/Functions";
 import { AlertTypes, STATUS_CODES } from "../utils/Types";
 import AlertModal from "../components/AlertModal";
 import VerificationModal from "../components/VerificationModal";
+import { redirect } from "react-router-dom";
 
 export default function Signup() {
   const [username, setUsername] = useState("");
@@ -52,9 +53,8 @@ export default function Signup() {
         localStorage.clear()
         localStorage.setItem("userID", res.id)
     }
+    redirect("/");
   };
-  setVerification(false);
-  setAlert("You are now registered!", "Success")
   return (
     <div className="bg-background text-text mb-auto text-center min-h-[calc(100vh-80px)] flex">
       <div className="mx-auto justify-center w-full align-middle text-center">

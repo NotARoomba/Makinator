@@ -47,6 +47,7 @@ export interface ResultsModalProps {
   game: string;
   statistics: GuessStatistics;
   highscore: GuessStatistics;
+  setIsOpen: (o: boolean) => void
   isOpen: boolean;
 }
 
@@ -80,4 +81,10 @@ export interface VerificationModalProps {
   isOpen: boolean;
   setOpen: (o: boolean) => void;
   action: (v: boolean) => void;
+}
+
+export enum GAMES {
+  MAKINATOR_GUESS = "makinatorData.guessGames",
+  MAKINATOR_PI = "makinatorData.piGames",
+  MAKINATOR_ONLINE = "makinatorData.onlineGames"
 }

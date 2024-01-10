@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import AlertModal from "../components/AlertModal";
 import {
   AlertTypes,
+  GAMES,
   GuessList,
   GuessStatistics,
   GuessTypes,
 } from "../utils/Types";
 import GuessBar from "../components/GuessBar";
-import { getFactors, isPrime } from "../utils/Functions";
+import { callAPI, getFactors, isPrime } from "../utils/Functions";
 import ResultsModal from "../components/ResultsModal";
 
 export default function Guess() {
@@ -19,6 +20,8 @@ export default function Guess() {
   const [errModal, setErrModal] = useState(false);
   const [wrongGuess, setWrongGuess] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [gameOverModal, setGameOverModal] = useState(false);
+  const [highscore, setHighscore] = useState<GuessStatistics>();
   const [time, setTime] = useState(0);
   useEffect(() => {
     setNumber(Math.floor(Math.random() * 100) + 1);
@@ -32,7 +35,7 @@ export default function Guess() {
     }
   };
   const addGuess = (type: GuessTypes, input: string) => {
-    console.log(type, input, number);
+    console.log(number)
     let predicate: boolean = true;
     if (type == GuessTypes.ISEVEN) predicate = number % 2 == 0;
     else if (type == GuessTypes.ISPRIME) predicate = isPrime(number);
@@ -50,7 +53,7 @@ export default function Guess() {
       .split("the number")[1]
       .replace("?", "")
       .replace("x", input)}`;
-    if (!guesses.map((v) => v.guessString).includes(guess))
+    if (!guesses.map((v) => v.guessString).includes(guess) && !gameOver)
       setGuesses([...guesses, { guessType: type, guessString: guess }]);
   };
   const onSubmit = () => {
@@ -58,11 +61,12 @@ export default function Guess() {
     else if (parseInt(inputValue) != number) {
       setWrongGuess(true);
       setTimeout(() => setWrongGuess(false), 1000);
-      setLives(lives - 1);
-      if (lives <= 0) setLives(0);
-      if (lives == 0) setGameOver(true);
+      if (lives-1 < 0) setLives(0);
+      else setLives(lives - 1)
+      if (lives-1 <= 0) {setGameOver(true);setGameOverModal(true)}
     } else {
       setGameOver(true);
+      setGameOverModal(true)
     }
   };
   const calculateScore = () => {
@@ -75,12 +79,26 @@ export default function Guess() {
     if (!gameOver) {
       const interval = setInterval(() => setTime(time + 1), 1000);
       return () => clearInterval(interval);
+    } else {
+      document.documentElement.style.overflowY = "hidden"
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time, gameOver]);
   useEffect(() => {
     //save to localstoer array or online if have acc
+    
     if (gameOver) {
+      const userID = localStorage.getItem("userID");
+      if (userID) {
+          callAPI("/games/update", "POST", {userID, type: GAMES.MAKINATOR_GUESS, game: {
+            time,
+            guesses: guesses.length,
+            lives,
+            score: calculateScore(),
+          }}).then(() => {
+            callAPI("/games/highscore", "POST", {userID: localStorage.getItem("userID"), type: GAMES.MAKINATOR_GUESS}).then((res) => setHighscore(res.highscore))
+          })
+      } else {
       const prevGames = JSON.parse(
         localStorage.getItem("guessStatistics") ?? "[]",
       );
@@ -110,6 +128,8 @@ export default function Guess() {
           ]),
         );
       }
+    }
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameOver]);
@@ -143,7 +163,7 @@ export default function Guess() {
           />
           <button
             onClick={onSubmit}
-            className=" bg-primary text-center flex  mx-auto my-4 w-48 min-w-max rounded-xl py-2 justify-center  text-text hover:bg-accent hover:shadow-md transition-all duration-300 font-semibold "
+            className=" bg-primary text-center flex  mx-auto my-4 w-32 xs:w-48 min-w-max rounded-xl py-2 justify-center  text-text hover:bg-accent hover:shadow-md transition-all duration-300 font-semibold "
           >
             Submit
           </button>
@@ -191,20 +211,20 @@ export default function Guess() {
           score: calculateScore(),
         }}
         highscore={
-          (
-            JSON.parse(
-              localStorage.getItem("guessStatistics") ?? "[]",
-            ) as GuessStatistics[]
-          ).sort(
-            (a: GuessStatistics, b: GuessStatistics) => b.score - a.score,
-          )[0] ?? {
-            time,
-            guesses: guesses.length,
-            lives,
-            score: calculateScore(),
-          }
+         highscore ?? (JSON.parse(
+          localStorage.getItem("guessStatistics") ?? "[]",
+        ) as GuessStatistics[]
+      ).sort(
+        (a: GuessStatistics, b: GuessStatistics) => b.score - a.score,
+      )[0] ?? {
+        time,
+        guesses: guesses.length,
+        lives,
+        score: calculateScore(),
+      }
         }
-        isOpen={gameOver}
+        isOpen={gameOverModal}
+        setIsOpen={setGameOverModal}
       />
       <AlertModal
         status={AlertTypes.ERROR}

@@ -6,17 +6,7 @@ export default function Letters() {
   const [height, setHeight] = useState(0);
   useLayoutEffect(() => {
     function updateSize() {
-      const body = document.body,
-        html = document.documentElement;
-      setHeight(
-        Math.max(
-          body.scrollHeight,
-          body.offsetHeight,
-          html.clientHeight,
-          html.scrollHeight,
-          html.offsetHeight,
-        ),
-      );
+      setHeight(document.body.scrollHeight);
     }
     window.addEventListener("resize", updateSize);
     updateSize();
