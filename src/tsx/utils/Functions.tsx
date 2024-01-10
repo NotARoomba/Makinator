@@ -28,7 +28,7 @@ export async function callAPI(
   const digest = Crypto.enc.Hex.stringify(
     Crypto.HmacSHA256(
       time + method + endpoint + Crypto.MD5(data).toString(),
-      Math.floor(Date.now() / (30 * 1000)).toString(),
+      Math.floor(Date.now() / (60 * 1000)).toString(),
     ),
   );
   const hmac = `HMAC ${time}:${digest}`;

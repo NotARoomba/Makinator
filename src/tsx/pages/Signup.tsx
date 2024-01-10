@@ -4,7 +4,7 @@ import { callAPI } from "../utils/Functions";
 import { AlertTypes, STATUS_CODES } from "../utils/Types";
 import AlertModal from "../components/AlertModal";
 import VerificationModal from "../components/VerificationModal";
-import { redirect } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 
 export default function Signup() {
   const [username, setUsername] = useState("");
@@ -76,6 +76,7 @@ export default function Signup() {
             }
             className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
           />
+          <Link to="/login" className="text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto ">Need to login?</Link>
           <LinkButton disabled={loading} text="Submit" action={parseSignup} />
         </div>
       </div>

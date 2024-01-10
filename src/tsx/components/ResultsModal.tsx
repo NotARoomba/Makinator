@@ -13,6 +13,7 @@ export default function ResultsModal({
   const navigate = useNavigate()
   return (
     <Modal
+      ariaHideApp={false}
       isOpen={isOpen}
       className={
         " w-2/6 min-w-96 pb-8 rounded-xl bg-background text-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 " +
