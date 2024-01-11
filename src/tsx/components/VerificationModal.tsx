@@ -1,8 +1,10 @@
-import { STATUS_CODES, VerificationModalProps } from "../utils/Types";
+import { AlertTypes, STATUS_CODES, VerificationModalProps } from "../utils/Types";
 import Modal from "react-modal";
 import LinkButton from "./LinkButton";
 import { callAPI } from "../utils/Functions";
 import { useState } from "react";
+import AlertModal from "./AlertModal";
+import LoadingScreen from "./LoadingScreen";
 
 export default function VerificationModal({
   email,
@@ -11,11 +13,22 @@ export default function VerificationModal({
   setOpen,
 }: VerificationModalProps) {
   const [code, setCode] = useState("");
+  const [codeModal, setCodeModal] = useState(false);
+  const [loading, setIsLoading] = useState(false);
   const verifyCode = async () => {
     const check = await callAPI("/verify/check", "POST", { email, code });
     if (check.status !== STATUS_CODES.SUCCESS) return action(false);
     else action(true);
   };
+  const sendCode = async () => {
+    setIsLoading(true)
+    await callAPI("/verify/send", "POST", {
+      email,
+      service: "Makinator Verification",
+    })
+    setIsLoading(false)
+    setCodeModal(true)
+  }
   return (
     <Modal
       ariaHideApp={false}
@@ -41,11 +54,20 @@ export default function VerificationModal({
           onChange={(e) => setCode(e.currentTarget.value)}
           className="mx-auto my-2 mt-5 bg-transparent text-center outline rounded outline-primary"
         />
+        <p className="text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto cursor-pointer " onClick={sendCode}>Resend code</p>
         <div className="flex gap-2">
           <LinkButton text="Cancel" action={() => setOpen(false)} />
           <LinkButton text="Submit" action={verifyCode} />
         </div>
       </div>
+      <LoadingScreen loading={loading} />
+      <AlertModal
+          status={AlertTypes.INFO}
+          title={"Success"}
+          text={"The code has been resent!"}
+          isOpen={codeModal}
+          setIsOpen={setCodeModal}
+        />
     </Modal>
   );
 }

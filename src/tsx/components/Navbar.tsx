@@ -10,7 +10,7 @@ export default function Navbar() {
     if (!value)
       setTimeout(() => {
         if (menuRef.current) menuRef.current.style.display = "none";
-      }, 300);
+      }, 500);
     else if (menuRef.current && value) menuRef.current.style.display = "flex";
     document.body.style.overflowY = value ? "hidden" : "auto";
   };

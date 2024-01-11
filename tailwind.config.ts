@@ -81,6 +81,8 @@ export default {
           900: "#100a29",
           950: "#080514",
         },
+        green: "#1B998B",
+        red: "#D7263D"
       },
       keyframes: {
         animatedgradient: {
@@ -90,11 +92,11 @@ export default {
         },
         show: {
           "0%": { opacity: "0", visibility: "visible" },
-          "100%": { opacity: "100" },
+          "100%": { opacity: "100", zIndex: "50" },
         },
         hide: {
           "0%": { opacity: "100" },
-          "100%": { opacity: "0", display: "none" },
+          "100%": { opacity: "0", display: "none", zIndex: "-50" },
         },
         lettersAnimation: {
           "0%": {
@@ -128,8 +130,8 @@ export default {
       },
       animation: {
         gradient: "animatedgradient 6s ease infinite alternate",
-        show: "show 300ms ease forwards",
-        hide: "hide 300ms ease forwards",
+        show: "show 500ms ease forwards",
+        hide: "hide 500ms ease forwards",
         animatedLetters: "lettersAnimation 25s linear infinite",
         shake: "shake 1s cubic-bezier(.36,.07,.19,.97) both",
       },

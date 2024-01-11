@@ -11,6 +11,7 @@ import GuessBar from "../components/GuessBar";
 import { callAPI, getFactors, isPrime } from "../utils/Functions";
 import ResultsModal from "../components/ResultsModal";
 import Transitions from "../components/Transitions";
+import LoadingScreen from "../components/LoadingScreen";
 
 export default function Guess() {
   // robot thinks of a number and the user tries to guess it using clues
@@ -23,10 +24,13 @@ export default function Guess() {
   const [gameOver, setGameOver] = useState(false);
   const [gameOverModal, setGameOverModal] = useState(false);
   const [highscore, setHighscore] = useState<GuessStatistics>();
+  const [loading, setIsLoading] = useState(false);
   const [time, setTime] = useState(0);
   useEffect(() => {
     setNumber(Math.floor(Math.random() * 100) + 1);
     setGuesses([]);
+    setTime(0);
+    setGameOver(false);
     setLives(3);
   }, []);
   const inputNumber = (input: React.FormEvent<HTMLInputElement>) => {
@@ -66,11 +70,9 @@ export default function Guess() {
       else setLives(lives - 1);
       if (lives - 1 <= 0) {
         setGameOver(true);
-        setGameOverModal(true);
       }
     } else {
       setGameOver(true);
-      setGameOverModal(true);
     }
   };
   const calculateScore = () => {
@@ -94,6 +96,7 @@ export default function Guess() {
     if (gameOver) {
       const userID = localStorage.getItem("userID");
       if (userID) {
+        setIsLoading(true)
         callAPI("/games/update", "POST", {
           userID,
           type: GAMES.MAKINATOR_GUESS,
@@ -107,7 +110,8 @@ export default function Guess() {
           callAPI("/games/highscore", "POST", {
             userID: localStorage.getItem("userID"),
             type: GAMES.MAKINATOR_GUESS,
-          }).then((res) => setHighscore(res.highscore));
+          }).then((res) => {setHighscore(res.highscore); setIsLoading(false);
+            setGameOverModal(true);});
         });
       } else {
         const prevGames = JSON.parse(
@@ -139,6 +143,7 @@ export default function Guess() {
             ]),
           );
         }
+        setGameOverModal(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,7 +152,7 @@ export default function Guess() {
   return (
     <Transitions>
       <div className="bg-transparent text-text h-full my-auto flex">
-        <div className="m-auto align-middle justify-center">
+        <div className="m-auto align-middle justify-center mt-20">
           <div className="mx-auto justify-center w-full align-middle text-center">
             <p className="text-4xl mt-4 mb-0 font-semibold">Guess the Number</p>
             <p className="text-xl">
@@ -194,7 +199,7 @@ export default function Guess() {
                 {guesses.map((v, i) => (
                   <p
                     key={i}
-                    className="text-xl bg-secondary px-4 py-2 rounded-xl text-background"
+                    className="text-xl bg-secondary px-4 py-2 rounded-xl text-background animate-show"
                   >
                     {v.guessString}
                   </p>
@@ -216,6 +221,7 @@ export default function Guess() {
                 ))}
             </div>
           </div>
+          <LoadingScreen loading={loading} />
           <ResultsModal
             game="guess"
             statistics={{
@@ -239,7 +245,7 @@ export default function Guess() {
                 score: calculateScore(),
               }
             }
-            isOpen={gameOverModal}
+            isOpen={gameOverModal && !loading}
             setIsOpen={setGameOverModal}
           />
           <AlertModal

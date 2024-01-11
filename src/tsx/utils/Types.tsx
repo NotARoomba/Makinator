@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 export interface NavButtonProps {
   route: string;
   text: string;
@@ -90,8 +92,32 @@ export enum GAMES {
 }
 
 export interface User {
+  _id: string;
   avatar: string;
   username: string;
   email: string;
   dateJoined: Date;
 }
+
+export interface LoadingScreenProps {
+  loading: boolean;
+}
+
+export interface Game {
+  score: number;
+  gamesPlayed: number;
+}
+
+export interface HighScore {
+  game: Game;
+  gamesPlayed: number;
+}
+
+export interface HighScoreBlockProps {
+  name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: ReactElement<any, any>;
+  highscore: number;
+  gamesPlayed: number;
+}
+

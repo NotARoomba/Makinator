@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LinkButton from "../components/LinkButton";
-import { callAPI } from "../utils/Functions";
+import { callAPI, checkIfLogin } from "../utils/Functions";
 import { AlertTypes, STATUS_CODES } from "../utils/Types";
 import AlertModal from "../components/AlertModal";
 import VerificationModal from "../components/VerificationModal";
 import { Link, useNavigate } from "react-router-dom";
 import Transitions from "../components/Transitions";
+import LoadingScreen from "../components/LoadingScreen";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -44,14 +45,25 @@ export default function Login() {
     if (res.status === STATUS_CODES.SUCCESS) {
       localStorage.clear();
       localStorage.setItem("userID", res.user._id);
+    } else {
+      setAlert("There was an error logging you in!", "Error");
     }
-    // navigate("/");
-    // navigate(0);
+    navigate("/");
+    navigate(0);
   };
+  useEffect(() => {
+    setIsLoading(true);
+    checkIfLogin().then((l) => {
+      if (l) {
+        return navigate("/profile");
+      }
+      setIsLoading(false);
+    });
+  }, [navigate]);
   return (
     <Transitions>
-      <div className="bg-background text-text mb-auto text-center h-full flex">
-        <div className="mx-auto justify-centemin-h-[calc(100vh-80px)]r w-full align-middle text-center">
+      <div className="bg-transparent text-text text-center h-full w-full flex">
+        <div className="m-auto justify-center h-full w-full align-middle text-center mt-20">
           <p className="text-4xl my-4 font-semibold">Login</p>
           <hr className="w-4/12 mx-auto mb-4"></hr>
           <div className="text-2xl justify-center mx-auto flex flex-col">
@@ -71,6 +83,7 @@ export default function Login() {
             </Link>
             <LinkButton disabled={loading} text="Submit" action={parseLogin} />
           </div>
+          <LoadingScreen loading={loading} />
         </div>
         <VerificationModal
           setOpen={setVerification}

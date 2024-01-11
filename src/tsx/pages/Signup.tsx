@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LinkButton from "../components/LinkButton";
-import { callAPI } from "../utils/Functions";
+import { callAPI, checkIfLogin } from "../utils/Functions";
 import { AlertTypes, STATUS_CODES } from "../utils/Types";
 import AlertModal from "../components/AlertModal";
 import VerificationModal from "../components/VerificationModal";
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Transitions from "../components/Transitions";
+import LoadingScreen from "../components/LoadingScreen";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [alertModal, setAlertModal] = useState(false);
@@ -35,7 +37,9 @@ export default function Signup() {
         email,
         service: "Makinator Verification",
       });
-      if (res.status === STATUS_CODES.EMAIL_NOT_EXIST)
+      if (res.status === STATUS_CODES.INVALID_EMAIL)
+        return setAlert("That email is invalid!");
+      else if (res.status === STATUS_CODES.EMAIL_NOT_EXIST)
         return setAlert("That email does not exist!");
       else if (res.status === STATUS_CODES.ERROR_SENDING_CODE)
         return setAlert("There was an error sending the code!");
@@ -70,12 +74,22 @@ export default function Signup() {
       localStorage.clear();
       localStorage.setItem("userID", res.id);
     }
-    redirect("/");
+    navigate("/");
+    navigate(0);
   };
+  useEffect(() => {
+    setIsLoading(true);
+    checkIfLogin().then((l) => {
+      if (l) {
+        navigate("/profile");
+      }
+    });
+    setIsLoading(false);
+  }, [navigate]);
   return (
     <Transitions>
       <div className="bg-transparent text-text mb-auto text-center h-full flex">
-        <div className="mx-auto justify-center w-full align-middle text-center">
+        <div className="mx-auto justify-center w-full align-middle text-center mt-20">
           <p className="text-4xl my-4 font-semibold">Sign Up</p>
           <hr className="w-4/12 mx-auto mb-4"></hr>
           <div className="text-2xl justify-center mx-auto flex flex-col">
@@ -102,6 +116,7 @@ export default function Signup() {
             </Link>
             <LinkButton disabled={loading} text="Submit" action={parseSignup} />
           </div>
+          <LoadingScreen loading={loading} />
         </div>
         <VerificationModal
           setOpen={setVerification}

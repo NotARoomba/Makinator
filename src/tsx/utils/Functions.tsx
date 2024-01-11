@@ -1,5 +1,5 @@
 import Crypto from "crypto-js";
-import { STATUS_CODES } from "./Types";
+import { STATUS_CODES, User } from "./Types";
 
 export function isPrime(num: number) {
   for (let i = 2, s = Math.sqrt(num); i <= s; i++) {
@@ -64,4 +64,12 @@ export async function callAPI(
       status: STATUS_CODES.GENERIC_ERROR,
     };
   }
+}
+
+export async function checkIfLogin(): Promise<false | User> {
+  const userID = localStorage.getItem("userID");
+  if (!userID) return false;
+  const validUser = await callAPI(`/users/${userID}`, "GET");
+  if (validUser.status === STATUS_CODES.USER_NOT_FOUND) return false;
+  return validUser.user;
 }
