@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import AlertModal from "../components/AlertModal";
-import {
-  AlertTypes,
-  GAMES,
-  GuessList,
-  GuessStatistics,
-  GuessTypes,
-} from "../utils/Types";
+import { GAMES, GuessList, GuessStatistics, GuessTypes } from "../utils/Types";
 import GuessBar from "../components/GuessBar";
 import { callAPI, getFactors, isPrime } from "../utils/Functions";
 import ResultsModal from "../components/ResultsModal";
@@ -96,7 +90,7 @@ export default function Guess() {
     if (gameOver) {
       const userID = localStorage.getItem("userID");
       if (userID) {
-        setIsLoading(true)
+        setIsLoading(true);
         callAPI("/games/update", "POST", {
           userID,
           type: GAMES.MAKINATOR_GUESS,
@@ -110,8 +104,11 @@ export default function Guess() {
           callAPI("/games/highscore", "POST", {
             userID: localStorage.getItem("userID"),
             type: GAMES.MAKINATOR_GUESS,
-          }).then((res) => {setHighscore(res.highscore); setIsLoading(false);
-            setGameOverModal(true);});
+          }).then((res) => {
+            setHighscore(res.highscore);
+            setIsLoading(false);
+            setGameOverModal(true);
+          });
         });
       } else {
         const prevGames = JSON.parse(
@@ -249,7 +246,6 @@ export default function Guess() {
             setIsOpen={setGameOverModal}
           />
           <AlertModal
-            status={AlertTypes.ERROR}
             title={"Error"}
             text={"Enter a number!"}
             isOpen={errModal}

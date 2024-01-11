@@ -2,43 +2,66 @@ import { useEffect, useState } from "react";
 import { callAPI, checkIfLogin } from "../utils/Functions";
 import { useNavigate } from "react-router-dom";
 import { HelpCircle, PieChart, User as UserIcon, Wifi } from "react-feather";
-import { AlertTypes, GAMES, HighScore, STATUS_CODES, User } from "../utils/Types";
+import { GAMES, HighScore, STATUS_CODES, User } from "../utils/Types";
 import AlertModal from "../components/AlertModal";
 import LoadingScreen from "../components/LoadingScreen";
 import HighScoreBlock from "../components/HighscoreBlock";
+import LinkButton from "../components/LinkButton";
+import EditModal from "../components/EditModal";
 
 export default function Profile() {
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User>();
-  const [highscores, setHighscores] = useState<HighScore[]>([])
-  const [error, setError] = useState(false);
+  const [highscores, setHighscores] = useState<HighScore[]>([]);
+  const [editModal, setEditModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
+  const [logoutModal, setLogoutModal] = useState(false);
   useEffect(() => {
-    setIsLoading(true);
-    checkIfLogin().then((user) => {
-      if (!user) {
-        navigate("/login");
-        return navigate(0);
-      }
-      callAPI("/games/highscores", "POST", {userID: user._id, types: [GAMES.MAKINATOR_GUESS, GAMES.MAKINATOR_PI, GAMES.MAKINATOR_ONLINE]}).then(res => {
-        if (res.status !== STATUS_CODES.SUCCESS) return setError(true)
-        setHighscores(res.highscores ?? []);
-      })
-      setUser(user);
-      setIsLoading(false);
-    });
-  }, [navigate]);
+    if (!editModal) {
+      setIsLoading(true);
+      checkIfLogin().then((user) => {
+        if (!user) {
+          navigate("/login");
+          return navigate(0);
+        }
+        callAPI("/games/highscores", "POST", {
+          userID: user._id,
+          types: [
+            GAMES.MAKINATOR_GUESS,
+            GAMES.MAKINATOR_PI,
+            GAMES.MAKINATOR_ONLINE,
+          ],
+        }).then((res) => {
+          if (res.status !== STATUS_CODES.SUCCESS) return setErrorModal(true);
+          setHighscores(res.highscores ?? []);
+        });
+        setUser(user);
+        setIsLoading(false);
+      });
+    }
+  }, [navigate, editModal]);
+  const logout = () => {
+    localStorage.clear();
+    navigate("/");
+    return navigate(0);
+  };
   return (
     <div className="text-text bg-transparent w-full h-full my-auto flex">
       <div className="m-auto align-middle w-full justify-center flex flex-col ">
-        <div className="flex flex-col lg:flex-row mx-auto gap-8">
+        <div className="flex flex-col lg:flex-row mx-auto gap-8 mt-24">
           {user?.avatar !== "" ? (
-            <img src={user?.avatar} className="rounded-xl max-w-72 mx-auto mt-24" />
+            <img
+              src={user?.avatar}
+              className="rounded-xl max-w-72 mx-auto my-auto"
+            />
           ) : (
             <UserIcon size={250} />
           )}
-          <div className="flex flex-col align-middle my-auto text-center lg:text-left ">
-            <p className="text-5xl 2xs:text-6xl sm:text-8xl font-bold ">{user?.username}</p>
+          <div className="flex flex-col my-auto align-middle text-center lg:text-left ">
+            <p className="text-5xl 2xs:text-6xl sm:text-8xl font-bold ">
+              {user?.username}
+            </p>
             <p className="text-2xl md:text-3xl text-secondary font-semibold">
               {user?.email}
             </p>
@@ -57,18 +80,45 @@ export default function Profile() {
         </div>
         <hr className="w-1/2 mx-auto bg-text my-6"></hr>
         <div className="flex mx-auto gap-8 flex-wrap justify-center py-3">
-              <HighScoreBlock icon={<HelpCircle size={50} className="mx-auto text-secondary" />} highscore={highscores[0]?.game?.score ?? 0} name="Guess the Number" gamesPlayed={highscores[0]?.gamesPlayed ?? 0} />
-              <HighScoreBlock icon={<PieChart size={50} className="mx-auto text-secondary" />} highscore={highscores[1]?.game?.score ?? 0} name="Digits of PI" gamesPlayed={highscores[1]?.gamesPlayed ?? 0} />
-              <HighScoreBlock icon={<Wifi size={50} className="mx-auto text-secondary" />} highscore={highscores[2]?.game?.score ?? 0} name="Online Play" gamesPlayed={highscores[2]?.gamesPlayed ?? 0} />
+          <HighScoreBlock
+            icon={<HelpCircle size={50} className="mx-auto text-secondary" />}
+            highscore={highscores[0]?.game?.score ?? 0}
+            name="Guess the Number"
+            gamesPlayed={highscores[0]?.gamesPlayed ?? 0}
+          />
+          <HighScoreBlock
+            icon={<PieChart size={50} className="mx-auto text-secondary" />}
+            highscore={highscores[1]?.game?.score ?? 0}
+            name="Digits of PI"
+            gamesPlayed={highscores[1]?.gamesPlayed ?? 0}
+          />
+          <HighScoreBlock
+            icon={<Wifi size={50} className="mx-auto text-secondary" />}
+            highscore={highscores[2]?.game?.score ?? 0}
+            name="Online Play"
+            gamesPlayed={highscores[2]?.gamesPlayed ?? 0}
+          />
+        </div>
+        <div className="flex gap-8 mx-auto flex-wrap jutify-center">
+          <LinkButton text="Edit Profile" action={() => setEditModal(true)} />
+          <LinkButton text="Logout" action={() => setLogoutModal(true)} />
         </div>
       </div>
       <LoadingScreen loading={loading} />
+      <EditModal setIsOpen={setEditModal} isOpen={editModal} />
       <AlertModal
-        status={AlertTypes.ERROR}
         title={"Error"}
         text={"There was an error fething the data!"}
-        isOpen={error}
-        setIsOpen={setError}
+        isOpen={errorModal}
+        setIsOpen={setErrorModal}
+      />
+      <AlertModal
+        title={"Confirmation"}
+        text={"Are you sure you want to logout?"}
+        action={logout}
+        cancel
+        isOpen={logoutModal}
+        setIsOpen={setLogoutModal}
       />
     </div>
   );

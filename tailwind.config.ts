@@ -82,7 +82,7 @@ export default {
           950: "#080514",
         },
         green: "#1B998B",
-        red: "#D7263D"
+        red: "#D7263D",
       },
       keyframes: {
         animatedgradient: {

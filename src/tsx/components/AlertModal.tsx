@@ -1,12 +1,14 @@
 import Modal from "react-modal";
 
 import { AlertModalProps } from "../utils/Types";
-import { AlertCircle, CheckCircle, XCircle } from "react-feather";
+import { AlertCircle, CheckCircle, Info, XCircle } from "react-feather";
 
 export default function AlertModal({
   title,
   text,
   isOpen,
+  action,
+  cancel = false,
   setIsOpen,
 }: AlertModalProps) {
   return (
@@ -32,21 +34,36 @@ export default function AlertModal({
             className="mx-auto mt-8 mb-4"
             color="#F46036"
           />
-        ) : (
+        ) : title.toLocaleLowerCase() == "success" ? (
           <CheckCircle
             size={100}
             className="mx-auto mt-8 mb-4"
             color="#1B998B"
           />
+        ) : (
+          <Info size={100} className="mx-auto mt-8 mb-4" color="#8f8f8f" />
         )}
         <p className="text-4xl mx-auto font-bold">{title}</p>
         <p className="text-xl mx-auto px-2 text-center">{text}</p>
-        <button
-          onClick={() => setIsOpen(false)}
-          className="px-4 w-36 mt-4 rounded-xl hover:bg-primary-500 bg-primary hover:shadow-md transition-all duration-300 text-2xl py-2 mx-auto"
-        >
-          Ok
-        </button>
+        <div className="flex mx-auto justify-center gap-6">
+          {cancel && (
+            <button
+              onClick={() => setIsOpen(false)}
+              className="px-4 w-32 mt-4 rounded-xl hover:bg-primary-500 bg-primary hover:shadow-md transition-all duration-300 text-2xl py-2 mx-auto"
+            >
+              Cancel
+            </button>
+          )}
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              action ? action() : 0;
+            }}
+            className="px-4 w-32 mt-4 rounded-xl hover:bg-primary-500 bg-primary hover:shadow-md transition-all duration-300 text-2xl py-2 mx-auto"
+          >
+            Ok
+          </button>
+        </div>
       </div>
     </Modal>
   );

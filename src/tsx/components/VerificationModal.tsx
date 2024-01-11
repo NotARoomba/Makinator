@@ -1,4 +1,4 @@
-import { AlertTypes, STATUS_CODES, VerificationModalProps } from "../utils/Types";
+import { STATUS_CODES, VerificationModalProps } from "../utils/Types";
 import Modal from "react-modal";
 import LinkButton from "./LinkButton";
 import { callAPI } from "../utils/Functions";
@@ -10,7 +10,7 @@ export default function VerificationModal({
   email,
   isOpen,
   action,
-  setOpen,
+  setIsOpen,
 }: VerificationModalProps) {
   const [code, setCode] = useState("");
   const [codeModal, setCodeModal] = useState(false);
@@ -21,14 +21,14 @@ export default function VerificationModal({
     else action(true);
   };
   const sendCode = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     await callAPI("/verify/send", "POST", {
       email,
       service: "Makinator Verification",
-    })
-    setIsLoading(false)
-    setCodeModal(true)
-  }
+    });
+    setIsLoading(false);
+    setCodeModal(true);
+  };
   return (
     <Modal
       ariaHideApp={false}
@@ -54,20 +54,24 @@ export default function VerificationModal({
           onChange={(e) => setCode(e.currentTarget.value)}
           className="mx-auto my-2 mt-5 bg-transparent text-center outline rounded outline-primary"
         />
-        <p className="text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto cursor-pointer " onClick={sendCode}>Resend code</p>
+        <p
+          className="text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto cursor-pointer "
+          onClick={sendCode}
+        >
+          Resend code
+        </p>
         <div className="flex gap-2">
-          <LinkButton text="Cancel" action={() => setOpen(false)} />
+          <LinkButton text="Cancel" action={() => setIsOpen(false)} />
           <LinkButton text="Submit" action={verifyCode} />
         </div>
       </div>
       <LoadingScreen loading={loading} />
       <AlertModal
-          status={AlertTypes.INFO}
-          title={"Success"}
-          text={"The code has been resent!"}
-          isOpen={codeModal}
-          setIsOpen={setCodeModal}
-        />
+        title={"Success"}
+        text={"The code has been resent!"}
+        isOpen={codeModal}
+        setIsOpen={setCodeModal}
+      />
     </Modal>
   );
 }

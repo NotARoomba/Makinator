@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LinkButton from "../components/LinkButton";
 import { callAPI, checkIfLogin } from "../utils/Functions";
-import { AlertTypes, STATUS_CODES } from "../utils/Types";
+import { STATUS_CODES } from "../utils/Types";
 import AlertModal from "../components/AlertModal";
 import VerificationModal from "../components/VerificationModal";
 import { Link, useNavigate } from "react-router-dom";
@@ -119,13 +119,12 @@ export default function Signup() {
           <LoadingScreen loading={loading} />
         </div>
         <VerificationModal
-          setOpen={setVerification}
+          setIsOpen={setVerification}
           isOpen={verification}
           email={email}
           action={checkSignup}
         />
         <AlertModal
-          status={AlertTypes.ERROR}
           title={alertMsg[0]}
           text={alertMsg[1]}
           isOpen={alertModal}

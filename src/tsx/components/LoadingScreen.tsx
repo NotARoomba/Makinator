@@ -18,12 +18,14 @@ export default function LoadingScreen({ loading }: LoadingScreenProps) {
           ariaLabel="triangle-loading"
           wrapperClass={loading ? " flex animate-show" : " animate-hide"}
         />
-        {loading && <div className={"flex mx-auto"}>
-          <img src="/logo.png" className="h-14 m-2 rounded-xl" />
-          <p className="text-left my-auto mb-5 -ml-3 font-bold text-text text-4xl">
-            akinator
-          </p>
-        </div>}
+        {loading && (
+          <div className={"flex mx-auto"}>
+            <img src="/logo.png" className="h-14 m-2 rounded-xl" />
+            <p className="text-left my-auto mb-5 -ml-3 font-bold text-text text-4xl">
+              akinator
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

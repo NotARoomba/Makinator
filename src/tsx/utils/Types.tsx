@@ -14,18 +14,16 @@ export enum GuessTypes {
   GREATERTHAN = "Is the number greater than x?",
 }
 
-export enum AlertTypes {
-  INFO,
-  WARNING,
-  ERROR,
-}
-
-export interface AlertModalProps {
-  status: AlertTypes;
-  title: string;
-  text: string;
+export interface BaseModalProps {
   isOpen: boolean;
   setIsOpen: (o: boolean) => void;
+}
+
+export interface AlertModalProps extends BaseModalProps {
+  title: string;
+  text: string;
+  cancel?: boolean;
+  action?: () => void;
 }
 
 export interface GuessBarProps {
@@ -45,12 +43,10 @@ export interface GuessStatistics {
   score: number;
 }
 
-export interface ResultsModalProps {
+export interface ResultsModalProps extends BaseModalProps {
   game: string;
   statistics: GuessStatistics;
   highscore: GuessStatistics;
-  setIsOpen: (o: boolean) => void;
-  isOpen: boolean;
 }
 
 export interface LinkButtonProps {
@@ -78,10 +74,8 @@ export enum STATUS_CODES {
   NONE_IN_USE,
 }
 
-export interface VerificationModalProps {
+export interface VerificationModalProps extends BaseModalProps {
   email: string;
-  isOpen: boolean;
-  setOpen: (o: boolean) => void;
   action: (v: boolean) => void;
 }
 
@@ -120,4 +114,3 @@ export interface HighScoreBlockProps {
   highscore: number;
   gamesPlayed: number;
 }
-
