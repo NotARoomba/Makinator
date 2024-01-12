@@ -1,2 +1,1 @@
-# Makinator
-A neat number game!
+# Makinator 2.0
