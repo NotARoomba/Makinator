@@ -11,6 +11,7 @@ import Signup from "./tsx/pages/Signup.tsx";
 import Profile from "./tsx/pages/Profile.tsx";
 import NavbarWrapper from "./tsx/components/NavbarWrapper.tsx";
 import Leaderboards from "./tsx/pages/Leaderboards.tsx";
+import PI from "./tsx/pages/PI.tsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,11 @@ const router = createBrowserRouter([
       {
         path: "/play/guess",
         element: <Guess />,
+        errorElement: <Error />,
+      },
+      {
+        path: "/play/pi",
+        element: <PI />,
         errorElement: <Error />,
       },
       {

@@ -80,32 +80,31 @@ export default function Profile() {
         </div>
         <hr className="w-1/2 lg:w-3/4 mx-auto border-background-800 my-3 border-2"></hr>
         <div className="flex flex-col lg:flex-col-reverse">
-          
           <div className="flex gap-8 mx-auto flex-wrap justify-center lg: mb-6">
             <LinkButton text="Edit Profile" action={() => setEditModal(true)} />
             <LinkButton text="Logout" action={() => setLogoutModal(true)} />
           </div>
-        <hr className="w-3/4 lg:w-1/2 mx-auto border-background-800 my-3 border-2"></hr>
-        <div className="flex mx-auto gap-8 flex-wrap justify-center py-3">
-          <HighScoreBlock
-            icon={<HelpCircle size={50} className="mx-auto text-secondary" />}
-            highscore={highscores[0]?.game?.score ?? 0}
-            name="Guess the Number"
-            gamesPlayed={highscores[0]?.gamesPlayed ?? 0}
-          />
-          <HighScoreBlock
-            icon={<PieChart size={50} className="mx-auto text-secondary" />}
-            highscore={highscores[1]?.game?.score ?? 0}
-            name="Digits of PI"
-            gamesPlayed={highscores[1]?.gamesPlayed ?? 0}
-          />
-          <HighScoreBlock
-            icon={<Wifi size={50} className="mx-auto text-secondary" />}
-            highscore={highscores[2]?.game?.score ?? 0}
-            name="Online Play"
-            gamesPlayed={highscores[2]?.gamesPlayed ?? 0}
-          />
-        </div>
+          <hr className="w-3/4 lg:w-1/2 mx-auto border-background-800 my-3 border-2"></hr>
+          <div className="flex mx-auto gap-8 flex-wrap justify-center py-3">
+            <HighScoreBlock
+              icon={<HelpCircle size={50} className="mx-auto text-secondary" />}
+              highscore={highscores[0]?.game?.score ?? 0}
+              name="Guess the Number"
+              gamesPlayed={highscores[0]?.gamesPlayed ?? 0}
+            />
+            <HighScoreBlock
+              icon={<PieChart size={50} className="mx-auto text-secondary" />}
+              highscore={highscores[1]?.game?.score ?? 0}
+              name="Digits of PI"
+              gamesPlayed={highscores[1]?.gamesPlayed ?? 0}
+            />
+            <HighScoreBlock
+              icon={<Wifi size={50} className="mx-auto text-secondary" />}
+              highscore={highscores[2]?.game?.score ?? 0}
+              name="Online Play"
+              gamesPlayed={highscores[2]?.gamesPlayed ?? 0}
+            />
+          </div>
         </div>
       </div>
       <LoadingScreen loading={loading} />
