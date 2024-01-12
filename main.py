@@ -11,7 +11,7 @@ pressed = tk.StringVar()
 def main():
     pressed = tk.StringVar()
     random.seed(time.time())
-    numbers = [i for i in range(1, 1000)]
+    numbers = [i for i in range(0, 101)]
     print("Think of a number between 1-1000")
     i = 2
     d = int(len(numbers)//2)
