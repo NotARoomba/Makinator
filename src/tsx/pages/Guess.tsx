@@ -170,17 +170,22 @@ export default function Guess() {
               <p className="text-xl">Lives Remaining</p>
             </div>
             <div className="w-1/3 my-auto flex flex-col mt-5">
-            <form onSubmit={(e) => {e.preventDefault();onSubmit()}}>
-              <input
-                type="tel"
-                value={inputValue}
-                onChange={inputNumber}
-                className={
-                  "mx-auto bg-transparent text-center w-28 text-6xl outline rounded-xl outline-secondary" +
-                  (wrongGuess ? " animate-shake" : "")
-                }
-                maxLength={3}
-              />
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onSubmit();
+                }}
+              >
+                <input
+                  type="tel"
+                  value={inputValue}
+                  onChange={inputNumber}
+                  className={
+                    "mx-auto bg-transparent text-center w-28 text-6xl outline rounded-xl outline-secondary" +
+                    (wrongGuess ? " animate-shake" : "")
+                  }
+                  maxLength={3}
+                />
               </form>
               <button
                 onClick={onSubmit}

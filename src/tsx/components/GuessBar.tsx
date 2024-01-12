@@ -16,14 +16,19 @@ export default function GuessBar({ guessType, onClick }: GuessBarProps) {
           <p onClick={() => onClick(guessType, inputValue)} className="mr-2">
             {guessType.split("x")[0]}
           </p>
-          <form onSubmit={(e) => {e.preventDefault();onClick(guessType, inputValue)}}>
-          <input
-            type="tel"
-            value={inputValue}
-            maxLength={3}
-            onInput={inputNumber}
-            className="mx-auto bg-transparent text-center w-9 outline rounded outline-primary"
-          />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onClick(guessType, inputValue);
+            }}
+          >
+            <input
+              type="tel"
+              value={inputValue}
+              maxLength={3}
+              onInput={inputNumber}
+              className="mx-auto bg-transparent text-center w-9 outline rounded outline-primary"
+            />
           </form>
           <p onClick={() => onClick(guessType, inputValue)} className="ml-2">
             {guessType.split("x")[1]}

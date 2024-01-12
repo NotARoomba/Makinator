@@ -110,6 +110,18 @@ export default {
             borderRadius: "50%",
           },
         },
+        PIAnimation: {
+          "0%": {
+            transform: "translate(-12px, 48px) rotate(0deg)",
+            opacity: "0.4",
+            borderRadius: "0",
+          },
+          "100%": {
+            transform: "translateY(1000px) rotate(720deg)",
+            opacity: "0",
+            borderRadius: "50%",
+          },
+        },
         shake: {
           "10%, 90%": {
             transform: "translate3d(-2px, 0, 0)",
@@ -124,6 +136,14 @@ export default {
             transform: "translate3d(8px, 0, 0)",
           },
         },
+        slide: {
+          "0%": {
+            transform: "translate(0, 0) rotate(0deg)",
+          },
+          "100%": {
+            transform: "translate(-12px, 12px) rotate(2deg)",
+          },
+        },
       },
       backgroundSize: {
         "300%": "300%",
@@ -133,6 +153,7 @@ export default {
         show: "show 500ms ease forwards",
         hide: "hide 500ms ease forwards",
         animatedLetters: "lettersAnimation 25s linear infinite",
+        animatedPI: "PIAnimation 15s ease-in-out forwards",
         shake: "shake 1s cubic-bezier(.36,.07,.19,.97) both",
       },
     },
