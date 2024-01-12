@@ -62,7 +62,7 @@ export default function Login() {
   }, [navigate]);
   return (
     <Transitions>
-      <div className="bg-transparent text-text text-center h-full w-full flex">
+      <div className="bg-transparent text-text text-center h-[calc(100%-80px)] w-full flex">
         <div className="m-auto justify-center h-full w-full align-middle text-center mt-20">
           <p className="text-4xl my-4 font-semibold">Login</p>
           <hr className="w-4/12 mx-auto mb-4"></hr>

@@ -31,7 +31,7 @@ export default function Leaderboards() {
   }, [gameType]);
   return (
     <Transitions>
-      <div className="bg-transparent text-text text-center h-full w-full flex">
+      <div className="bg-transparent text-text text-center h-[calc(100%-80px)] w-full flex">
         <div className="m-auto justify-center h-full w-full align-middle text-center pt-20">
           <p className="text-4xl my-4 mb-0 font-semibold">Leaderboards</p>
           <div className="flex justify-center gap-8 mb-4">

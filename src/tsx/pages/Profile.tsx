@@ -47,7 +47,7 @@ export default function Profile() {
     return navigate(0);
   };
   return (
-    <div className="text-text bg-transparent w-full h-full my-auto flex">
+    <div className="text-text bg-transparent w-full h-[calc(100%-80px)] my-auto flex">
       <div className="m-auto align-middle w-full justify-center flex flex-col ">
         <div className="flex flex-col lg:flex-row mx-auto gap-8 mt-24">
           {user?.avatar !== "" ? (
@@ -81,7 +81,7 @@ export default function Profile() {
         <hr className="w-1/2 lg:w-3/4 mx-auto border-background-800 my-3 border-2"></hr>
         <div className="flex flex-col lg:flex-col-reverse">
           
-          <div className="flex gap-8 mx-auto flex-wrap justify-center">
+          <div className="flex gap-8 mx-auto flex-wrap justify-center lg: mb-6">
             <LinkButton text="Edit Profile" action={() => setEditModal(true)} />
             <LinkButton text="Logout" action={() => setLogoutModal(true)} />
           </div>

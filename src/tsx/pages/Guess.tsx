@@ -153,7 +153,7 @@ export default function Guess() {
   // there will be options such as is number divisible by x or is number multiple of x or is even or is it a prime number or if number has exactly x factors
   return (
     <Transitions>
-      <div className="bg-transparent text-text h-full my-auto flex">
+      <div className="bg-transparent text-text h-[calc(100%-80px)] my-auto flex">
         <div className="m-auto align-middle justify-center mt-20">
           <div className="mx-auto justify-center w-full align-middle text-center">
             <p className="text-4xl mt-4 mb-0 font-semibold">Guess the Number</p>

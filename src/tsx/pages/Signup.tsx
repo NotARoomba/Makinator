@@ -88,7 +88,7 @@ export default function Signup() {
   }, [navigate]);
   return (
     <Transitions>
-      <div className="bg-transparent text-text mb-auto text-center h-full flex">
+      <div className="bg-transparent text-text mb-auto text-center h-[calc(100%-80px)] flex">
         <div className="mx-auto justify-center w-full align-middle text-center mt-20">
           <p className="text-4xl my-4 font-semibold">Sign Up</p>
           <hr className="w-4/12 mx-auto mb-4"></hr>
