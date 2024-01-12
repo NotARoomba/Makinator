@@ -5,10 +5,12 @@ import Transitions from "../components/Transitions";
 import AlertModal from "../components/AlertModal";
 import { AnimatePresence, motion } from "framer-motion";
 import { generateProblem } from "../utils/Functions";
+import 'katex/dist/katex.min.css';
+import { BlockMath } from 'react-katex';
 
 export default function PI() {
   //try to guess the digits of pi using mathmatical formulas as hints
-  const [PI, setPI] = useState<string[]>([]);
+  const [PI, setPI] = useState<string[]>(["1"]);
   const [currentPI, setCurrentPI] = useState<string[]>("    3.".split(""));
   const [lives, setLives] = useState(3);
   const [inputValue, setInputValue] = useState("");
@@ -18,6 +20,7 @@ export default function PI() {
   const [gameOverModal, setGameOverModal] = useState(false);
   const [highscore, setHighscore] = useState<GuessStatistics>();
   const [loading, setLoading] = useState(false);
+  const [equation, setEquation] = useState("");
   const [time, setTime] = useState(0);
   const variants = {
     initial: ({ i, c }: { i: number; c: boolean }) => ({
@@ -53,10 +56,11 @@ export default function PI() {
     setGameOver(false);
     setGameOverModal(false);
     setInputValue("");
+    setCurrentPI("    3.".split(""));
+    setEquation(generateProblem(parseInt(PI[0]),currentPI.length-6))
     setLives(3);
   };
   const onSubmit = () => {
-    console.log(generateProblem(parseInt(PI[0]), 20));
     if (inputValue === "") setErrModal(true);
     else if (gameOver) setGameOverModal(true);
     else if (inputValue != PI[0]) {
@@ -72,19 +76,28 @@ export default function PI() {
       setPI(PI);
       setInputValue("");
       setCurrentPI([...currentPI, digit ?? "0"]);
+      setEquation(generateProblem(parseInt(PI[0]),currentPI.length-6))
     }
   };
   useEffect(() => {
-    resetGame();
+    resetGame()
   }, []);
   const inputNumber = (input: React.FormEvent<HTMLInputElement>) => {
     if (
       !Number.isNaN(
-        input.currentTarget.value || input.currentTarget.value === "0",
+        input.currentTarget.value || input.currentTarget.value == "0",
       )
     ) {
       const converted = parseInt(input.currentTarget.value);
-      setInputValue(!converted ? "" : converted.toString());
+      // can be exploited
+      // if (input.currentTarget.value == PI[0]) {
+      //   const digit = PI.shift();
+      //   setPI(PI);
+      //   setInputValue("");
+      //   setCurrentPI([...currentPI, digit ?? "0"]);
+      //   return setEquation(generateProblem(parseInt(PI[0]),currentPI.length-6))
+      // }
+      setInputValue(converted.toString() == "NaN" ? "" : converted.toString());
     }
   };
   useEffect(() => {
@@ -186,6 +199,9 @@ export default function PI() {
                 </p>
                 <p className="text-xl">Digits</p>
               </div>
+            </div>
+            <div className="flex text-4xl mx-auto text-center w-fit animate-show">
+              <BlockMath math={equation} />
             </div>
           </div>
           <AlertModal

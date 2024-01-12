@@ -90,8 +90,19 @@ export function convertToBase64(file: Blob) {
   });
 }
 
+function getRandomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+// Function to calculate gcd
+function calculateGcd(x: number, y: number) {
+  while (y !== 0) {
+      [x, y] = [y, x % y];
+  }
+  return x;
+}
+
 export function generateProblem(digit: number, guesses: number) {
-  let equation, operations, randMax;
+  let equation = "", operations, randMax;
   // 1415926535
   // const randomness = Math.random() > 0.5;
   if (guesses <= 10) {
@@ -100,12 +111,17 @@ export function generateProblem(digit: number, guesses: number) {
     do {
       equation = `${Math.round(Math.random()*randMax)}${operations[Math.floor(Math.random()*operations.length)]}${Math.round(Math.random()*randMax)}`
     } while (eval(equation) !== digit)
-  } else if( guesses <= 20) {
-    operations = ["+", "-", "/", "*"]
-    randMax = 25;
-    do {
-        equation = `((${Math.round(Math.random()*randMax)+Math.round(Math.random()*randMax)}${operations[Math.floor(Math.random()*operations.length)]}${Math.round(Math.random()*randMax)})${operations[Math.floor(Math.random()*operations.length)]}x)${operations[Math.floor(Math.random()*operations.length)]}${Math.round(Math.random()*randMax)+Math.round(Math.random()*randMax)}`
-    } while ((eval(equation.replace("x", digit.toString())) !== digit || eval(equation.replace("x", digit.toString())).toString()[0] !== digit.toString()) && (eval(equation.replace("x", (digit+1).toString())) !== digit+1 || eval(equation.replace("x", (digit+1).toString())).toString()[0] !== (digit+1).toString()))
+    equation += "=x"
+  } else if( guesses > 10) {
+    randMax = 50;
+    let a,b,c = 0;
+    do  {
+      a = getRandomInt(1, randMax);
+      b = getRandomInt(1, randMax);
+      c = a * digit + b;
+
+      equation = `${a}x + ${b} = ${c}`;
+    } while (((a*digit)+ b) != c );
   }
-  return equation+"=x";
+  return equation;
 }
