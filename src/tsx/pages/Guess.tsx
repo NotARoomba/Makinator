@@ -170,6 +170,7 @@ export default function Guess() {
               <p className="text-xl">Lives Remaining</p>
             </div>
             <div className="w-1/3 my-auto flex flex-col mt-5">
+            <form onSubmit={(e) => {e.preventDefault();onSubmit()}}>
               <input
                 type="tel"
                 value={inputValue}
@@ -180,6 +181,7 @@ export default function Guess() {
                 }
                 maxLength={3}
               />
+              </form>
               <button
                 onClick={onSubmit}
                 className=" bg-primary text-center flex  mx-auto my-4 w-32 xs:w-48 min-w-max rounded-xl py-2 justify-center  text-text hover:bg-accent hover:shadow-md transition-all duration-300 font-semibold "
