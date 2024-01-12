@@ -17,6 +17,7 @@ export default function GuessBar({ guessType, onClick }: GuessBarProps) {
             {guessType.split("x")[0]}
           </p>
           <input
+            type="tel"
             value={inputValue}
             maxLength={3}
             onInput={inputNumber}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { callAPI, checkIfLogin } from "../utils/Functions";
 import { useNavigate } from "react-router-dom";
 import { HelpCircle, PieChart, User as UserIcon, Wifi } from "react-feather";
-import { GAMES, HighScore, STATUS_CODES, User } from "../utils/Types";
+import { GAMES, GameStats, STATUS_CODES, User } from "../utils/Types";
 import AlertModal from "../components/AlertModal";
 import LoadingScreen from "../components/LoadingScreen";
 import HighScoreBlock from "../components/HighscoreBlock";
@@ -11,21 +11,21 @@ import EditModal from "../components/EditModal";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const [loading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User>();
-  const [highscores, setHighscores] = useState<HighScore[]>([]);
+  const [highscores, setHighscores] = useState<GameStats[]>([]);
   const [editModal, setEditModal] = useState(false);
   const [errorModal, setErrorModal] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
   useEffect(() => {
     if (!editModal) {
-      setIsLoading(true);
+      setLoading(true);
       checkIfLogin().then((user) => {
         if (!user) {
           navigate("/login");
           return navigate(0);
         }
-        callAPI("/games/highscores", "POST", {
+        callAPI(`/games/${user._id}/highscores`, "POST", {
           userID: user._id,
           types: [
             GAMES.MAKINATOR_GUESS,
@@ -37,7 +37,7 @@ export default function Profile() {
           setHighscores(res.highscores ?? []);
         });
         setUser(user);
-        setIsLoading(false);
+        setLoading(false);
       });
     }
   }, [navigate, editModal]);

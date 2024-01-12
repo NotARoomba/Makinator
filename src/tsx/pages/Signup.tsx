@@ -14,21 +14,21 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [alertModal, setAlertModal] = useState(false);
   const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
-  const [loading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [verification, setVerification] = useState(false);
   const setAlert = (msg: string, title?: string) => {
     title ? setAlertMsg([title, msg]) : setAlertMsg(["Error", msg]);
     setAlertModal(true);
   };
   const parseSignup = async () => {
-    setIsLoading(true);
+    setLoading(true);
     const doesExist = await callAPI("/users/check", "POST", {
       username,
       email,
     });
     console.log(doesExist);
     if (doesExist.status !== STATUS_CODES.GENERIC_ERROR) {
-      setIsLoading(false);
+      setLoading(false);
       if (doesExist.status === STATUS_CODES.EMAIL_IN_USE)
         return setAlert("The email is already in use!");
       else if (doesExist.status === STATUS_CODES.USERNAME_IN_USE)
@@ -78,13 +78,13 @@ export default function Signup() {
     navigate(0);
   };
   useEffect(() => {
-    setIsLoading(true);
+    setLoading(true);
     checkIfLogin().then((l) => {
       if (l) {
         navigate("/profile");
       }
     });
-    setIsLoading(false);
+    setLoading(false);
   }, [navigate]);
   return (
     <Transitions>

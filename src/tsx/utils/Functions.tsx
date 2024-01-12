@@ -70,10 +70,12 @@ export async function checkIfLogin(): Promise<false | User> {
   const userID = localStorage.getItem("userID");
   if (!userID) return false;
   const validUser = await callAPI(`/users/${userID}`, "GET");
-  if (validUser.status === STATUS_CODES.USER_NOT_FOUND) return false;
+  if (validUser.status === STATUS_CODES.USER_NOT_FOUND) {
+    localStorage.clear();
+    return false;
+  }
   return validUser.user;
 }
-
 
 export function convertToBase64(file: Blob) {
   return new Promise<string>((resolve, reject) => {

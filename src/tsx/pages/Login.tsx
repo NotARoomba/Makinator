@@ -13,19 +13,19 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [alertModal, setAlertModal] = useState(false);
   const [alertMsg, setAlertMsg] = useState(["Error", "An error occured!"]);
-  const [loading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [verification, setVerification] = useState(false);
   const setAlert = (msg: string, title?: string) => {
     title ? setAlertMsg([title, msg]) : setAlertMsg(["Error", msg]);
     setAlertModal(true);
   };
   const parseLogin = async () => {
-    setIsLoading(true);
+    setLoading(true);
     const doesExist = await callAPI("/users/check", "POST", {
       email,
     });
     if (doesExist.status !== STATUS_CODES.GENERIC_ERROR) {
-      setIsLoading(false);
+      setLoading(false);
       if (doesExist.status !== STATUS_CODES.EMAIL_IN_USE)
         return setAlert("There is no account with that email!");
       const res = await callAPI("/verify/send", "POST", {
@@ -45,19 +45,19 @@ export default function Login() {
     if (res.status === STATUS_CODES.SUCCESS) {
       localStorage.clear();
       localStorage.setItem("userID", res.user._id);
+      navigate("/");
+      navigate(0);
     } else {
       setAlert("There was an error logging you in!", "Error");
     }
-    navigate("/");
-    navigate(0);
   };
   useEffect(() => {
-    setIsLoading(true);
+    setLoading(true);
     checkIfLogin().then((l) => {
       if (l) {
         return navigate("/profile");
       }
-      setIsLoading(false);
+      setLoading(false);
     });
   }, [navigate]);
   return (

@@ -10,6 +10,7 @@ import Login from "./tsx/pages/Login.tsx";
 import Signup from "./tsx/pages/Signup.tsx";
 import Profile from "./tsx/pages/Profile.tsx";
 import NavbarWrapper from "./tsx/components/NavbarWrapper.tsx";
+import Leaderboards from "./tsx/pages/Leaderboards.tsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,11 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+        errorElement: <Error />,
+      },
+      {
+        path: "/leaderboards",
+        element: <Leaderboards />,
         errorElement: <Error />,
       },
     ],

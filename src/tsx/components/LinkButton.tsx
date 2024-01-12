@@ -6,11 +6,15 @@ export default function LinkButton({
   action,
   text,
   disabled,
+  selected,
 }: LinkButtonProps) {
   return route ? (
     <Link
       to={route}
-      className="px-4 w-36 xl:w-44 mt-4 rounded-xl hover:bg-primary-500 bg-primary hover:shadow-md transition-all duration-300 text-xl md:text-2xl py-2 mx-auto font-bold"
+      className={
+        "px-4 min-w-36 xl:min-w-44 max-w-52 mt-4 rounded-xl hover:bg-primary-500 hover:shadow-md transition-all duration-300 text-xl md:text-xl py-2 mx-auto font-bold " +
+        (selected ? "bg-primary-800" : "bg-primary")
+      }
     >
       {text}
     </Link>
@@ -18,7 +22,10 @@ export default function LinkButton({
     <button
       disabled={disabled}
       onClick={action}
-      className="px-4 w-36 xl:w-44 mt-4 rounded-xl hover:bg-primary-500 bg-primary hover:shadow-md transition-all duration-300 text-xl md:text-2xl py-2 mx-auto font-bold"
+      className={
+        "px-4 min-w-36 xl:min-w-44 max-w-52 mt-4 rounded-xl hover:bg-primary-500 hover:shadow-md transition-all duration-300 text-xl md:text-xl py-2 mx-auto font-bold " +
+        (selected ? "bg-primary-800" : "bg-primary")
+      }
     >
       {text}
     </button>

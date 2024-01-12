@@ -60,6 +60,7 @@ export default function Navbar() {
 
         <div className="justify-left hidden lg:flex text-lg text-gray gap-4 mx-4">
           <NavButton route="/play" text="Play" />
+          <NavButton route="/leaderboards" text="Leaderboards" />
           {localStorage.getItem("userID") ? (
             <NavButton route="/profile" text="Profile" />
           ) : (
@@ -71,11 +72,12 @@ export default function Navbar() {
         onClick={() => setMenu(false)}
         ref={menuRef}
         className={
-          " bg-white/80 dark:bg-primary/20 w-full absolute mx-auto h-fit top-20 z-30 justify-center flex-wrap transition duration-300" +
+          " bg-white/80 dark:bg-primary/20 w-full absolute mx-auto h-fit top-20 z-50 justify-center flex-wrap transition duration-300" +
           (menu ? " animate-show" : " animate-hide hidden")
         }
       >
         <NavButton route="/play" text="Play" />
+        <NavButton route="/leaderboards" text="Leaderboards" />
         {localStorage.getItem("userID") ? (
           <NavButton route="/profile" text="Profile" />
         ) : (

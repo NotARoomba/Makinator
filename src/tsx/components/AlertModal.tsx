@@ -20,7 +20,7 @@ export default function AlertModal({
         (isOpen ? "animate-show" : "animate-hide")
       }
       overlayClassName={
-        "bg-text-800/80 absolute w-screen h-screen top-0 left-0 " +
+        "bg-text-800/80 absolute w-full h-full top-0 left-0 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       closeTimeoutMS={300}

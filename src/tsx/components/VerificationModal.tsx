@@ -14,19 +14,19 @@ export default function VerificationModal({
 }: VerificationModalProps) {
   const [code, setCode] = useState("");
   const [codeModal, setCodeModal] = useState(false);
-  const [loading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const verifyCode = async () => {
     const check = await callAPI("/verify/check", "POST", { email, code });
     if (check.status !== STATUS_CODES.SUCCESS) return action(false);
     else action(true);
   };
   const sendCode = async () => {
-    setIsLoading(true);
+    setLoading(true);
     await callAPI("/verify/send", "POST", {
       email,
       service: "Makinator Verification",
     });
-    setIsLoading(false);
+    setLoading(false);
     setCodeModal(true);
   };
   return (
@@ -38,7 +38,7 @@ export default function VerificationModal({
         (isOpen ? "animate-show" : "animate-hide")
       }
       overlayClassName={
-        "bg-text-800/80 absolute w-screen h-screen top-0 left-0 " +
+        "bg-text-800/80 absolute w-full h-full top-0 left-0 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       closeTimeoutMS={300}
@@ -50,6 +50,7 @@ export default function VerificationModal({
           <p className="font-bold">{email}</p>
         </p>
         <input
+          type="tel"
           value={code}
           onChange={(e) => setCode(e.currentTarget.value)}
           className="mx-auto my-2 mt-5 bg-transparent text-center outline rounded outline-primary"

@@ -11,7 +11,7 @@ import { Edit2, User } from "react-feather";
 
 export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
   const navigate = useNavigate();
-  const [loading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userID, setUserID] = useState("");
   const [avatar, setAvatar] = useState("");
   const [username, setUsername] = useState("");
@@ -20,13 +20,13 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
   const [alertModal, setAlertModal] = useState(false);
   const [alertMsg, setAlertMsg] = useState<string[]>(["", ""]);
   const [verification, setVerification] = useState(false);
-  const inputRef = createRef<HTMLInputElement>()
+  const inputRef = createRef<HTMLInputElement>();
   const setAlert = (msg: string, title?: string) => {
     title ? setAlertMsg([title, msg]) : setAlertMsg(["Error", msg]);
     setAlertModal(true);
   };
   useEffect(() => {
-    setIsLoading(true);
+    setLoading(true);
     checkIfLogin().then((user) => {
       if (!user) {
         navigate("/login");
@@ -37,15 +37,28 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
       setUsername(user.username);
       setEmail(user.email);
       setOldEmail(user.email);
-      setIsLoading(false);
+      setLoading(false);
     });
   }, [navigate]);
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-        const file = e.target.files[0];
-        if (!['jpg', 'jpeg', 'bmp', 'gif', 'svg', 'webp', 'jfif', 'avif', 'apng'].includes(file.name.split('.').reverse()[0].toLowerCase())) return setAlert("That is not a valid image file!");
-        const base64 = await convertToBase64(file);
-        setAvatar(base64);
+      const file = e.target.files[0];
+      if (
+        ![
+          "jpg",
+          "jpeg",
+          "bmp",
+          "gif",
+          "svg",
+          "webp",
+          "jfif",
+          "avif",
+          "apng",
+        ].includes(file.name.split(".").reverse()[0].toLowerCase())
+      )
+        return setAlert("That is not a valid image file!");
+      const base64 = await convertToBase64(file);
+      setAvatar(base64);
     }
   };
   const updateUser = async (v: boolean) => {
@@ -71,14 +84,17 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
         (isOpen ? "animate-show" : "animate-hide")
       }
       overlayClassName={
-        "bg-text-800/80 absolute w-screen h-screen top-0 left-0 " +
+        "bg-text-800/80 absolute w-full h-full top-0 left-0 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       closeTimeoutMS={300}
     >
       <div className="w-full h-full flex flex-col text-center ">
         <p className="text-5xl font-bold mb-4">Edit Profile</p>
-        <div className="relative text-center mx-auto cursor-pointer group" onClick={() => inputRef.current?.click()}>
+        <div
+          className="relative text-center mx-auto cursor-pointer group"
+          onClick={() => inputRef.current?.click()}
+        >
           {avatar !== "" ? (
             <img src={avatar} className="rounded-xl max-w-32 group" />
           ) : (
@@ -89,18 +105,18 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
           </div>
         </div>
         <div className="mx-auto mt-4">
-            <p className="text-2xl font-bold ">Username</p>
-            <input
+          <p className="text-2xl font-bold ">Username</p>
+          <input
             value={username}
             onChange={(e) => setUsername(e.currentTarget.value)}
             className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
-            />
-            <p className="text-2xl font-bold ">Email</p>
-            <input
+          />
+          <p className="text-2xl font-bold ">Email</p>
+          <input
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
             className="mx-auto my-2  bg-transparent text-center outline rounded outline-primary"
-            />
+          />
         </div>
         <div className="flex gap-2">
           <LinkButton text="Cancel" action={() => setIsOpen(false)} />
@@ -113,13 +129,13 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
         </div>
       </div>
       <input
-          type="file"
-          ref={inputRef}
-          name="avatar"
-          accept="image/*"
-          onChange={(e) => handleFileUpload(e)}
-          className="hidden"
-        />
+        type="file"
+        ref={inputRef}
+        name="avatar"
+        accept="image/*"
+        onChange={(e) => handleFileUpload(e)}
+        className="hidden"
+      />
       <LoadingScreen loading={loading} />
       <VerificationModal
         setIsOpen={setVerification}

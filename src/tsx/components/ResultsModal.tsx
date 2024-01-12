@@ -1,16 +1,14 @@
 import Modal from "react-modal";
-
 import { ResultsModalProps } from "../utils/Types";
-import { useNavigate } from "react-router-dom";
 import LinkButton from "./LinkButton";
 
 export default function ResultsModal({
   statistics,
   highscore,
   isOpen,
+  resetGame,
   setIsOpen,
 }: ResultsModalProps) {
-  const navigate = useNavigate();
   return (
     <Modal
       ariaHideApp={false}
@@ -20,7 +18,7 @@ export default function ResultsModal({
         (isOpen ? "animate-show" : "animate-hide")
       }
       overlayClassName={
-        "bg-text-800/80 absolute w-screen h-screen top-0 left-0 " +
+        "bg-text-800/80 absolute w-full h-full top-0 left-0 " +
         (isOpen ? "animate-show" : "animate-hide")
       }
       closeTimeoutMS={300}
@@ -80,8 +78,8 @@ export default function ResultsModal({
           </div>
         ) : (
           <div className="flex justify-center font-bold text-xl">
-            <LinkButton text="Play Again" action={() => navigate(0)} />
-            <LinkButton text="Leaderboard" route="/leaderboard" />
+            <LinkButton text="Play Again" action={resetGame} />
+            <LinkButton text="Leaderboards" route="/leaderboards" />
           </div>
         )}
         <div className="flex">

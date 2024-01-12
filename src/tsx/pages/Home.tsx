@@ -8,7 +8,7 @@ export default function Home() {
           <h1 className="text-6xl lg:text-8xl font-bold">Makinator</h1>
           <p className="text-xl">An intelectual math game!</p>
         </div>
-        <div className="md:w-1/2  mt-auto mb-0 md:my-auto z-20 mx-auto">
+        <div className="md:w-1/2  mt-auto mb-0 md:my-auto z-10 mx-auto">
           <img className="my-auto mx-auto w-1/2" src="/logo.png" />
         </div>
       </div>

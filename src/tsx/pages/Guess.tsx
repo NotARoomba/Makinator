@@ -18,14 +18,20 @@ export default function Guess() {
   const [gameOver, setGameOver] = useState(false);
   const [gameOverModal, setGameOverModal] = useState(false);
   const [highscore, setHighscore] = useState<GuessStatistics>();
-  const [loading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [time, setTime] = useState(0);
-  useEffect(() => {
-    setNumber(Math.floor(Math.random() * 100) + 1);
+  const resetGame = () => {
+    // setNumber(Math.floor(Math.random() * 100) + 1);
+    setNumber(69);
     setGuesses([]);
     setTime(0);
     setGameOver(false);
+    setGameOverModal(false);
+    setInputValue("");
     setLives(3);
+  };
+  useEffect(() => {
+    resetGame();
   }, []);
   const inputNumber = (input: React.FormEvent<HTMLInputElement>) => {
     if (!Number.isNaN(input.currentTarget.value)) {
@@ -57,6 +63,7 @@ export default function Guess() {
   };
   const onSubmit = () => {
     if (inputValue === "") setErrModal(true);
+    else if (gameOver) setGameOverModal(true);
     else if (parseInt(inputValue) != number) {
       setWrongGuess(true);
       setTimeout(() => setWrongGuess(false), 1000);
@@ -65,9 +72,7 @@ export default function Guess() {
       if (lives - 1 <= 0) {
         setGameOver(true);
       }
-    } else {
-      setGameOver(true);
-    }
+    } else setGameOver(true);
   };
   const calculateScore = () => {
     return Math.round(
@@ -90,7 +95,7 @@ export default function Guess() {
     if (gameOver) {
       const userID = localStorage.getItem("userID");
       if (userID) {
-        setIsLoading(true);
+        setLoading(true);
         callAPI("/games/update", "POST", {
           userID,
           type: GAMES.MAKINATOR_GUESS,
@@ -101,12 +106,12 @@ export default function Guess() {
             score: calculateScore(),
           },
         }).then(() => {
-          callAPI("/games/highscore", "POST", {
-            userID: localStorage.getItem("userID"),
+          callAPI(`/games/${userID}/highscore`, "POST", {
+            userID,
             type: GAMES.MAKINATOR_GUESS,
           }).then((res) => {
             setHighscore(res.highscore);
-            setIsLoading(false);
+            setLoading(false);
             setGameOverModal(true);
           });
         });
@@ -166,7 +171,7 @@ export default function Guess() {
             </div>
             <div className="w-1/3 my-auto flex flex-col mt-5">
               <input
-                type="text"
+                type="tel"
                 value={inputValue}
                 onChange={inputNumber}
                 className={
@@ -243,6 +248,7 @@ export default function Guess() {
               }
             }
             isOpen={gameOverModal && !loading}
+            resetGame={resetGame}
             setIsOpen={setGameOverModal}
           />
           <AlertModal

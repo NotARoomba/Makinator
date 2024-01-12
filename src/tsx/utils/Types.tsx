@@ -47,6 +47,7 @@ export interface ResultsModalProps extends BaseModalProps {
   game: string;
   statistics: GuessStatistics;
   highscore: GuessStatistics;
+  resetGame: () => void;
 }
 
 export interface LinkButtonProps {
@@ -54,6 +55,7 @@ export interface LinkButtonProps {
   route?: string;
   action?: () => void;
   disabled?: boolean;
+  selected?: boolean;
 }
 
 export enum STATUS_CODES {
@@ -102,7 +104,7 @@ export interface Game {
   gamesPlayed: number;
 }
 
-export interface HighScore {
+export interface GameStats {
   game: Game;
   gamesPlayed: number;
 }
@@ -113,4 +115,11 @@ export interface HighScoreBlockProps {
   icon: ReactElement<any, any>;
   highscore: number;
   gamesPlayed: number;
+}
+
+export interface HighScore {
+  _id: string;
+  username: string;
+  score: number;
+  time: number;
 }
