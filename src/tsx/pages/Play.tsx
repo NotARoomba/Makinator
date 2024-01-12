@@ -11,7 +11,7 @@ export default function Play() {
           <div className="mx-auto justify-center flex flex-wrap">
             <NavButton route="/play/guess" text="Guess the Number" />
             <NavButton route="/play/pi" text="Digits of PI" />
-            <NavButton route="/play/online" text="Online Play" />
+            {/* <NavButton route="/play/online" text="Online Play" /> */}
           </div>
         </div>
       </div>

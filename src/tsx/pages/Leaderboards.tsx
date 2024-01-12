@@ -38,7 +38,7 @@ export default function Leaderboards() {
             {[
               { "Guess the Number": GAMES.MAKINATOR_GUESS },
               { "Digits of PI": GAMES.MAKINATOR_PI },
-              { "Online Play": GAMES.MAKINATOR_ONLINE },
+              // { "Online Play": GAMES.MAKINATOR_ONLINE },
             ].map((v, i) => (
               <LinkButton
                 key={i}

@@ -77,12 +77,12 @@ export default function ResultsModal({
             </div>
           </div>
         ) : (
-          <div className="flex justify-center font-bold text-xl">
+          <div className="flex justify-center font-bold text-xl gap-8">
             <LinkButton text="Play Again" action={resetGame} />
             <LinkButton text="Leaderboards" route="/leaderboards" />
           </div>
         )}
-        <div className="flex">
+        <div className="flex mx-auto mt-3">
           <LinkButton text="Close" action={() => setIsOpen(!isOpen)} />
         </div>
       </div>
