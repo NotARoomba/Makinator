@@ -109,7 +109,7 @@ export function generateProblem(digit: number, guesses: number) {
     } while (o == operations[0] ? a+b !== digit : a-b !== digit)
     equation = `${a}${o}${b}=x`;
   } else if( guesses > 10) {
-    randMax = 50;
+    randMax = 50 * Math.floor(guesses / 10);
     let a,b,c = 0;
     do  {
       a = getRandomInt(1, randMax);

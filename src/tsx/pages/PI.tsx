@@ -5,10 +5,9 @@ import Transitions from "../components/Transitions";
 import AlertModal from "../components/AlertModal";
 import { AnimatePresence, motion } from "framer-motion";
 import { callAPI, generateProblem } from "../utils/Functions";
-import 'katex/dist/katex.min.css';
-import { BlockMath } from 'react-katex';
 import LoadingScreen from "../components/LoadingScreen";
 import ResultsModal from "../components/ResultsModal";
+import { MathJax, MathJaxContext } from "better-react-mathjax";
 
 export default function PI() {
   //try to guess the digits of pi using mathmatical formulas as hints
@@ -29,8 +28,8 @@ export default function PI() {
     initial: ({ i, c }: { i: number; c: boolean }) => ({
       opacity: 0,
       scale: 0.2,
-      transform: `rotate(${360 - (c ? (c ? 5 - i : i) : i) * 8}deg) translate(${
-        c ? "12" : "24"
+      transform: `rotate(${360 - (c ? 5 - i : i) * 8}deg) translate(${
+        c ? "12" : "12"
       }px, ${(c ? 5 - i : i) * 8}px) rotate(-${360 - (c ? 5 - i : i) * 8}deg)`,
     }),
     animate: ({ i, c }: { i: number; c: boolean }) => ({
@@ -44,7 +43,7 @@ export default function PI() {
       opacity: 0,
       scale: 0,
       transform: `rotate(${(c ? 5 - i : i) * 8}deg) translate(${
-        c ? "-64" : "0"
+        c ? "-64" : "-48"
       }px, ${(c ? 5 - i : i) * 8}px) rotate(-${(c ? 5 - i : i) * 8}deg)`,
     }),
   };
@@ -207,7 +206,7 @@ export default function PI() {
             </div>
             <div className="flex my-4 mx-auto justify-center w-screen text-center sm:-mt-6 md:-mt-14">
               
-              <div className="flex justify-between">
+              <div className="flex w-fit translate-x-6">
                 {currentPI.slice(0, -6).map((v, i) => (
                   <p
                     key={i}
@@ -221,7 +220,7 @@ export default function PI() {
                     {v}
                   </p>
                 ))}
-                <div className="flex translate-x-6">
+                <div className="flex">
                   
                 {currentPI.slice(-6).map((v, i) => (
                   <motion.p
@@ -230,7 +229,7 @@ export default function PI() {
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    transition={{ duration: 1, delay: i * 0.01 }}
+                    transition={{ duration: 1, delay: i * 0.05 }}
                     key={v + i}
                     className="text-4xl lg:text-6xl mx-1 w-6 lg:w-12 "
                   >
@@ -244,6 +243,7 @@ export default function PI() {
                   e.preventDefault();
                   onSubmit();
                 }}
+                className="w-fit"
               >
                 <input
                   ref={inputRef}
@@ -257,7 +257,7 @@ export default function PI() {
                   maxLength={1}
                 />
               </form>
-              <div className="flex justify-between">
+              <div className="flex w-fit">
                 {PI.slice(0, 6).map((v, i) => (
                   <motion.p
                     custom={{ i, c: false }}
@@ -265,7 +265,7 @@ export default function PI() {
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    transition={{ duration: 1, delay: i * 0.05 + 0.1 }}
+                    transition={{ duration: 1, delay: i * 0.05 + 0.3  }}
                     key={v + i}
                     className=" text-4xl lg:text-6xl mx-1 w-6 lg:w-12 "
                   >
@@ -283,7 +283,7 @@ export default function PI() {
                 Submit
               </button>
             <div className="flex text-4xl mx-auto text-center w-fit animate-show">
-              <BlockMath math={equation} />
+              <MathJaxContext config={{loader: { load: ["input/asciimath"] }}}><MathJax className="animate-show" key={equation}>`{equation}`</MathJax></MathJaxContext>
             </div>
           </div>
           <LoadingScreen loading={loading} />
