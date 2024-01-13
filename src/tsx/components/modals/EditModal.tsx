@@ -118,7 +118,7 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
             className="mx-auto my-2  bg-transparent text-center outline rounded outline-primary"
           />
         </div>
-        <div className="flex gap-2 mx-auto justify-center">
+        <div className="flex gap-2 mx-auto justify-center mt-4">
           <LinkButton text="Cancel" action={() => setIsOpen(false)} />
           <LinkButton
             text="Submit"
