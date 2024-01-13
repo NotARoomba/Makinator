@@ -93,13 +93,6 @@ export function convertToBase64(file: Blob) {
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-// Function to calculate gcd
-function calculateGcd(x: number, y: number) {
-  while (y !== 0) {
-      [x, y] = [y, x % y];
-  }
-  return x;
-}
 
 export function generateProblem(digit: number, guesses: number) {
   let equation = "", operations, randMax;

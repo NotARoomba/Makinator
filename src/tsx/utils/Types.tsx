@@ -36,19 +36,29 @@ export interface GuessList {
   guessString: string;
 }
 
-export interface GuessStatistics {
+export interface BaseStatistics {
   time: number; //in s
-  guesses: number;
   lives: number;
   score: number;
 }
 
+export interface GuessStatistics extends BaseStatistics {
+  guesses: number;
+}
+
+export interface PIStatistics extends BaseStatistics {
+  digits: number;
+}
+
+
 export interface ResultsModalProps extends BaseModalProps {
-  game: string;
-  statistics: GuessStatistics;
-  highscore: GuessStatistics;
+  game: GAMES;
+  statistics: Statistics;
+  highscore: Statistics;
   resetGame: () => void;
 }
+
+export type Statistics = GuessStatistics | PIStatistics;
 
 export interface LinkButtonProps {
   text: string;

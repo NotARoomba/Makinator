@@ -232,7 +232,7 @@ export default function Guess() {
           </div>
           <LoadingScreen loading={loading} />
           <ResultsModal
-            game="guess"
+            game={GAMES.MAKINATOR_GUESS}
             statistics={{
               time,
               guesses: guesses.length,

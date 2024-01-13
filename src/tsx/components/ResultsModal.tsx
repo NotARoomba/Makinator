@@ -1,8 +1,9 @@
 import Modal from "react-modal";
-import { ResultsModalProps } from "../utils/Types";
+import { GAMES, ResultsModalProps } from "../utils/Types";
 import LinkButton from "./LinkButton";
 
 export default function ResultsModal({
+  game,
   statistics,
   highscore,
   isOpen,
@@ -39,7 +40,7 @@ export default function ResultsModal({
         </div> */}
         <p className="text-6xl font-bold mt-2 text-[#1B998B]">Game Over</p>
         <p className="text-2xl ">
-          You {statistics.lives == 0 ? "did not" : "did"} guess the number!
+          {'guesses' in statistics ? `You ${statistics.lives == 0 ? "did not" : "did"} guess the number!` : `You guessed ${statistics.digits} digits of PI!`}
         </p>
         <div className="flex text-center justify-center text-lg my-2">
           <div className="w-1/3 font-bold">
@@ -47,14 +48,14 @@ export default function ResultsModal({
             <p>{new Date(highscore.time * 1000).toISOString().slice(11, 19)}</p>
             <p>{highscore.score}</p>
             <p>{highscore.lives}</p>
-            <p>{highscore.guesses}</p>
+            <p>{'guesses' in highscore ? highscore.guesses : highscore.digits}</p>
           </div>
           <div className="w-1/6 font-bold text-secondary-300">
             <p className=" text-xl text-text text-center ">_</p>
             <p>Time</p>
             <p>Score</p>
             <p>Lives</p>
-            <p>Guesses</p>
+            <p>{game == GAMES.MAKINATOR_GUESS ? "Guesses" : "Digits"}</p>
           </div>
           <div className="w-1/3 font-semibold ">
             <p className=" text-xl font-bold">Your Score</p>
@@ -63,7 +64,7 @@ export default function ResultsModal({
             </p>
             <p>{statistics.score}</p>
             <p>{statistics.lives}</p>
-            <p>{statistics.guesses}</p>
+            <p>{'guesses' in statistics ? statistics.guesses : statistics.digits}</p>
           </div>
         </div>
         {!localStorage.getItem("userID") ? (

@@ -56,7 +56,7 @@ export default function VerificationModal({
           className="mx-auto my-2 mt-5 bg-transparent text-center outline rounded outline-primary"
         />
         <p
-          className="text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto cursor-pointer "
+          className="text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto cursor-pointer mb-2 "
           onClick={sendCode}
         >
           Resend code

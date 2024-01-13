@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import raw from "/pi.txt";
-import { GuessStatistics } from "../utils/Types";
+import { GAMES, PIStatistics } from "../utils/Types";
 import Transitions from "../components/Transitions";
 import AlertModal from "../components/AlertModal";
 import { AnimatePresence, motion } from "framer-motion";
-import { generateProblem } from "../utils/Functions";
+import { callAPI, generateProblem } from "../utils/Functions";
 import 'katex/dist/katex.min.css';
 import { BlockMath } from 'react-katex';
+import LoadingScreen from "../components/LoadingScreen";
+import ResultsModal from "../components/ResultsModal";
 
 export default function PI() {
   //try to guess the digits of pi using mathmatical formulas as hints
@@ -18,10 +20,11 @@ export default function PI() {
   const [wrongGuess, setWrongGuess] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [gameOverModal, setGameOverModal] = useState(false);
-  const [highscore, setHighscore] = useState<GuessStatistics>();
+  const [highscore, setHighscore] = useState<PIStatistics>();
   const [loading, setLoading] = useState(false);
   const [equation, setEquation] = useState("");
   const [time, setTime] = useState(0);
+  const inputRef = createRef<HTMLInputElement>();
   const variants = {
     initial: ({ i, c }: { i: number; c: boolean }) => ({
       opacity: 0,
@@ -72,6 +75,7 @@ export default function PI() {
         setGameOver(true);
       }
     } else {
+      inputRef.current?.focus();
       const digit = PI.shift();
       setPI(PI);
       setInputValue("");
@@ -81,6 +85,7 @@ export default function PI() {
   };
   useEffect(() => {
     resetGame()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const inputNumber = (input: React.FormEvent<HTMLInputElement>) => {
     if (
@@ -109,7 +114,69 @@ export default function PI() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time, gameOver]);
-
+  const calculateScore = () => {
+    return (200 * (currentPI.length-6)) * (3**lives);
+  };
+  useEffect(() => {
+    //save to localstoer array or online if have acc
+    if (gameOver) {
+      const userID = localStorage.getItem("userID");
+      if (userID) {
+        setLoading(true);
+        callAPI("/games/update", "POST", {
+          userID,
+          type: GAMES.MAKINATOR_PI,
+          game: {
+            time,
+            digits: currentPI.length-6,
+            lives,
+            score: calculateScore(),
+          },
+        }).then(() => {
+          callAPI(`/games/${userID}/highscore`, "POST", {
+            userID,
+            type: GAMES.MAKINATOR_PI,
+          }).then((res) => {
+            setHighscore(res.highscore);
+            setLoading(false);
+            setGameOverModal(true);
+          });
+        });
+      } else {
+        const prevGames = JSON.parse(
+          localStorage.getItem("piStatistics") ?? "[]",
+        );
+        if (prevGames == null) {
+          localStorage.setItem(
+            "piStatistics",
+            JSON.stringify([
+              {
+                time,
+                digits: currentPI.length-6,
+                lives,
+                score: calculateScore(),
+              } as PIStatistics,
+            ]),
+          );
+        } else {
+          localStorage.setItem(
+            "piStatistics",
+            JSON.stringify([
+              ...prevGames,
+              {
+                time,
+                digits: currentPI.length-6,
+                lives,
+                score: calculateScore(),
+              } as PIStatistics,
+            ]),
+          );
+        }
+        setGameOverModal(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameOver]);
   return (
     <AnimatePresence>
       <Transitions>
@@ -120,23 +187,32 @@ export default function PI() {
               <p className="text-xl">
                 Guess 1 million digits of PI using equations!
               </p>
-              <p className="font-bold text-4xl text-secondary ">
-                {new Date(time * 1000).toISOString().slice(11, 19)}
-              </p>
-            </div>
-            <div className="flex my-4 mx-auto justify-center w-screen text-center">
+              <div className="flex">
               <div className="w-1/3 mx-auto">
-                <p className="font-bold text-7xl text-secondary text-center">
+                <p className="font-bold text-5xl lg:text-7xl text-secondary text-center">
                   {lives}
                 </p>
-                <p className="text-xl text-center">Lives Remaining</p>
+                <p className=" text-lg lg:text-xl text-wrap w-24 flex mx-auto text-center">Lives Remaining</p>
               </div>
+              <p className="font-bold text-3xl xs:text-4xl w-1/3 text-secondary ">
+                {new Date(time * 1000).toISOString().slice(11, 19)}
+              </p>
+              <div className="w-1/3">
+                <p className="font-bold text-5xl lg:text-7xl text-secondary">
+                  {currentPI.length - 6}
+                </p>
+                <p className=" text-lg lg:text-xl">Digits</p>
+              </div>
+              </div>
+            </div>
+            <div className="flex my-4 mx-auto justify-center w-screen text-center sm:-mt-6 md:-mt-14">
+              
               <div className="flex justify-between">
                 {currentPI.slice(0, -6).map((v, i) => (
                   <p
                     key={i}
                     className={
-                      "text-6xl m-0 translate-y-12 animate-animatedPI h-0 w-0"
+                      "text-4xl lg:text-6xl m-0 translate-y-12 animate-animatedPI h-0 w-0"
                     }
                     onAnimationEnd={(e) =>
                       (e.currentTarget.style.display = "hidden")
@@ -145,6 +221,8 @@ export default function PI() {
                     {v}
                   </p>
                 ))}
+                <div className="flex translate-x-6">
+                  
                 {currentPI.slice(-6).map((v, i) => (
                   <motion.p
                     custom={{ i, c: true }}
@@ -154,11 +232,12 @@ export default function PI() {
                     exit="exit"
                     transition={{ duration: 1, delay: i * 0.01 }}
                     key={v + i}
-                    className="text-6xl mx-1 w-12 "
+                    className="text-4xl lg:text-6xl mx-1 w-6 lg:w-12 "
                   >
                     {v}
                   </motion.p>
                 ))}
+                </div>
               </div>
               <form
                 onSubmit={(e) => {
@@ -167,11 +246,12 @@ export default function PI() {
                 }}
               >
                 <input
+                  ref={inputRef}
                   type="tel"
                   value={inputValue}
                   onChange={inputNumber}
                   className={
-                    "bg-transparent text-center w-28 text-6xl outline rounded-xl outline-secondary" +
+                    "bg-transparent text-center w-14 lg:w-28 text-4xl lg:text-6xl outline rounded-xl outline-secondary" +
                     (wrongGuess ? " animate-shake" : "")
                   }
                   maxLength={1}
@@ -187,23 +267,53 @@ export default function PI() {
                     exit="exit"
                     transition={{ duration: 1, delay: i * 0.05 + 0.1 }}
                     key={v + i}
-                    className="text-6xl mx-1 w-12 "
+                    className=" text-4xl lg:text-6xl mx-1 w-6 lg:w-12 "
                   >
                     ?
                   </motion.p>
                 ))}
               </div>
-              <div className="w-1/3">
-                <p className="font-bold text-7xl text-secondary">
-                  {currentPI.length - 6}
-                </p>
-                <p className="text-xl">Digits</p>
-              </div>
+              
             </div>
+
+            <button
+                onClick={(e) => {e.stopPropagation();onSubmit()}}
+                className=" bg-primary text-center flex  mx-auto my-4 w-32 xs:w-48 min-w-max rounded-xl py-2 justify-center  text-text hover:bg-accent hover:shadow-md transition-all duration-300 font-semibold "
+              >
+                Submit
+              </button>
             <div className="flex text-4xl mx-auto text-center w-fit animate-show">
               <BlockMath math={equation} />
             </div>
           </div>
+          <LoadingScreen loading={loading} />
+          <ResultsModal
+            game={GAMES.MAKINATOR_PI}
+            statistics={{
+              time,
+              digits: currentPI.length-6,
+              lives,
+              score: calculateScore(),
+            }}
+            highscore={
+              highscore ??
+              (
+                JSON.parse(
+                  localStorage.getItem("piStatistics") ?? "[]",
+                ) as PIStatistics[]
+              ).sort(
+                (a: PIStatistics, b: PIStatistics) => b.score - a.score,
+              )[0] ?? {
+                time,
+                digits: currentPI.length-6,
+                lives,
+                score: calculateScore(),
+              }
+            }
+            isOpen={gameOverModal && !loading}
+            resetGame={resetGame}
+            setIsOpen={setGameOverModal}
+          />
           <AlertModal
             title={"Error"}
             text={"Enter a number!"}
