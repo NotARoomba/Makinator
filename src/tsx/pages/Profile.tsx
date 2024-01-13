@@ -56,7 +56,7 @@ export default function Profile() {
               className="rounded-xl max-w-72 mx-auto my-auto"
             />
           ) : (
-            <UserIcon size={250} />
+            <UserIcon size={250} className="m-auto justify-center" />
           )}
           <div className="flex flex-col my-auto align-middle text-center lg:text-left ">
             <p className="text-5xl 2xs:text-6xl sm:text-8xl font-bold ">
@@ -85,7 +85,7 @@ export default function Profile() {
             <LinkButton text="Logout" action={() => setLogoutModal(true)} />
           </div>
           <hr className="w-3/4 lg:w-1/2 mx-auto border-background-800 my-3 border-2"></hr>
-          <div className="flex mx-auto gap-8 flex-wrap justify-center py-3">
+          <div className="flex mx-auto gap-8 flex-wrap justify-center py-3 mb-8 lg:mb-0">
             <HighScoreBlock
               icon={<HelpCircle size={50} className="mx-auto text-secondary" />}
               highscore={highscores[0]?.game?.score ?? 0}
