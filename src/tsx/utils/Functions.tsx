@@ -100,11 +100,14 @@ export function generateProblem(digit: number, guesses: number) {
   // const randomness = Math.random() > 0.5;
   if (guesses <= 10) {
     operations = ["+", "-"]
+    let a,b,o = ""
     randMax = 10;
     do {
-      equation = `${Math.round(Math.random()*randMax)}${operations[Math.floor(Math.random()*operations.length)]}${Math.round(Math.random()*randMax)}`
-    } while (eval(equation) !== digit)
-    equation += "=x"
+      o = operations[Math.floor(Math.random()*operations.length)]
+      a = getRandomInt(1, randMax);
+      b = getRandomInt(1, randMax);
+    } while (o == operations[0] ? a+b !== digit : a-b !== digit)
+    equation = `${a}${o}${b}=x`;
   } else if( guesses > 10) {
     randMax = 50;
     let a,b,c = 0;
