@@ -95,29 +95,35 @@ function getRandomInt(min: number, max: number) {
 }
 
 export function generateProblem(digit: number, guesses: number) {
-  let equation = "", operations, randMax;
+  let equation = "",
+    operations,
+    randMax;
   // 1415926535
   // const randomness = Math.random() > 0.5;
   if (guesses <= 10) {
-    operations = ["+", "-"]
-    let a,b,o = ""
+    operations = ["+", "-"];
+    let a,
+      b,
+      o = "";
     randMax = 10;
     do {
-      o = operations[Math.floor(Math.random()*operations.length)]
+      o = operations[Math.floor(Math.random() * operations.length)];
       a = getRandomInt(1, randMax);
       b = getRandomInt(1, randMax);
-    } while (o == operations[0] ? a+b !== digit : a-b !== digit)
+    } while (o == operations[0] ? a + b !== digit : a - b !== digit);
     equation = `${a}${o}${b}=x`;
-  } else if( guesses > 10) {
+  } else if (guesses > 10) {
     randMax = 50 * Math.floor(guesses / 10);
-    let a,b,c = 0;
-    do  {
+    let a,
+      b,
+      c = 0;
+    do {
       a = getRandomInt(1, randMax);
       b = getRandomInt(1, randMax);
       c = a * digit + b;
 
       equation = `${a}x + ${b} = ${c}`;
-    } while (((a*digit)+ b) != c );
+    } while (a * digit + b != c);
   }
   return equation;
 }

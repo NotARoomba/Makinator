@@ -50,7 +50,6 @@ export interface PIStatistics extends BaseStatistics {
   digits: number;
 }
 
-
 export interface ResultsModalProps extends BaseModalProps {
   game: GAMES;
   statistics: Statistics;
@@ -130,6 +129,7 @@ export interface HighScoreBlockProps {
 export interface HighScore {
   _id: string;
   username: string;
+  avatar: string;
   score: number;
   time: number;
 }

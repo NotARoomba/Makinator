@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { callAPI, checkIfLogin } from "../utils/Functions";
 import { useNavigate } from "react-router-dom";
-import { HelpCircle, PieChart, User as UserIcon, Wifi } from "react-feather";
+import { HelpCircle, PieChart, User as UserIcon } from "react-feather";
 import { GAMES, GameStats, STATUS_CODES, User } from "../utils/Types";
 import AlertModal from "../components/AlertModal";
 import LoadingScreen from "../components/LoadingScreen";
@@ -98,12 +98,12 @@ export default function Profile() {
               name="Digits of PI"
               gamesPlayed={highscores[1]?.gamesPlayed ?? 0}
             />
-            <HighScoreBlock
+            {/* <HighScoreBlock
               icon={<Wifi size={50} className="mx-auto text-secondary" />}
               highscore={highscores[2]?.game?.score ?? 0}
               name="Online Play"
               gamesPlayed={highscores[2]?.gamesPlayed ?? 0}
-            />
+            /> */}
           </div>
         </div>
       </div>

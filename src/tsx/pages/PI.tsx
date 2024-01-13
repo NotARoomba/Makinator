@@ -59,7 +59,7 @@ export default function PI() {
     setGameOverModal(false);
     setInputValue("");
     setCurrentPI("    3.".split(""));
-    setEquation(generateProblem(parseInt(PI[0]),currentPI.length-6))
+    setEquation(generateProblem(parseInt(PI[0]), currentPI.length - 6));
     setLives(3);
   };
   const onSubmit = () => {
@@ -79,12 +79,12 @@ export default function PI() {
       setPI(PI);
       setInputValue("");
       setCurrentPI([...currentPI, digit ?? "0"]);
-      setEquation(generateProblem(parseInt(PI[0]),currentPI.length-6))
+      setEquation(generateProblem(parseInt(PI[0]), currentPI.length - 6));
     }
   };
   useEffect(() => {
-    resetGame()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    resetGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const inputNumber = (input: React.FormEvent<HTMLInputElement>) => {
     if (
@@ -114,7 +114,7 @@ export default function PI() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time, gameOver]);
   const calculateScore = () => {
-    return (200 * (currentPI.length-6)) * (3**lives);
+    return 200 * (currentPI.length - 6) * 3 ** lives;
   };
   useEffect(() => {
     //save to localstoer array or online if have acc
@@ -127,7 +127,7 @@ export default function PI() {
           type: GAMES.MAKINATOR_PI,
           game: {
             time,
-            digits: currentPI.length-6,
+            digits: currentPI.length - 6,
             lives,
             score: calculateScore(),
           },
@@ -151,7 +151,7 @@ export default function PI() {
             JSON.stringify([
               {
                 time,
-                digits: currentPI.length-6,
+                digits: currentPI.length - 6,
                 lives,
                 score: calculateScore(),
               } as PIStatistics,
@@ -164,7 +164,7 @@ export default function PI() {
               ...prevGames,
               {
                 time,
-                digits: currentPI.length-6,
+                digits: currentPI.length - 6,
                 lives,
                 score: calculateScore(),
               } as PIStatistics,
@@ -187,25 +187,26 @@ export default function PI() {
                 Guess 1 million digits of PI using equations!
               </p>
               <div className="flex">
-              <div className="w-1/3 mx-auto">
-                <p className="font-bold text-5xl lg:text-7xl text-secondary text-center">
-                  {lives}
+                <div className="w-1/3 mx-auto">
+                  <p className="font-bold text-5xl lg:text-7xl text-secondary text-center">
+                    {lives}
+                  </p>
+                  <p className=" text-lg lg:text-xl text-wrap w-24 flex mx-auto text-center">
+                    Lives Remaining
+                  </p>
+                </div>
+                <p className="font-bold text-3xl xs:text-4xl w-1/3 text-secondary ">
+                  {new Date(time * 1000).toISOString().slice(11, 19)}
                 </p>
-                <p className=" text-lg lg:text-xl text-wrap w-24 flex mx-auto text-center">Lives Remaining</p>
-              </div>
-              <p className="font-bold text-3xl xs:text-4xl w-1/3 text-secondary ">
-                {new Date(time * 1000).toISOString().slice(11, 19)}
-              </p>
-              <div className="w-1/3">
-                <p className="font-bold text-5xl lg:text-7xl text-secondary">
-                  {currentPI.length - 6}
-                </p>
-                <p className=" text-lg lg:text-xl">Digits</p>
-              </div>
+                <div className="w-1/3">
+                  <p className="font-bold text-5xl lg:text-7xl text-secondary">
+                    {currentPI.length - 6}
+                  </p>
+                  <p className=" text-lg lg:text-xl">Digits</p>
+                </div>
               </div>
             </div>
             <div className="flex my-4 mx-auto justify-center w-screen text-center sm:-mt-6 md:-mt-14">
-              
               <div className="flex w-fit translate-x-6">
                 {currentPI.slice(0, -6).map((v, i) => (
                   <p
@@ -221,21 +222,20 @@ export default function PI() {
                   </p>
                 ))}
                 <div className="flex">
-                  
-                {currentPI.slice(-6).map((v, i) => (
-                  <motion.p
-                    custom={{ i, c: true }}
-                    variants={variants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    transition={{ duration: 1, delay: i * 0.05 }}
-                    key={v + i}
-                    className="text-4xl lg:text-6xl mx-1 w-6 lg:w-12 "
-                  >
-                    {v}
-                  </motion.p>
-                ))}
+                  {currentPI.slice(-6).map((v, i) => (
+                    <motion.p
+                      custom={{ i, c: true }}
+                      variants={variants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={{ duration: 1, delay: i * 0.05 }}
+                      key={v + i}
+                      className="text-4xl lg:text-6xl mx-1 w-6 lg:w-12 "
+                    >
+                      {v}
+                    </motion.p>
+                  ))}
                 </div>
               </div>
               <form
@@ -265,7 +265,7 @@ export default function PI() {
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    transition={{ duration: 1, delay: i * 0.05 + 0.3  }}
+                    transition={{ duration: 1, delay: i * 0.05 + 0.3 }}
                     key={v + i}
                     className=" text-4xl lg:text-6xl mx-1 w-6 lg:w-12 "
                   >
@@ -273,17 +273,25 @@ export default function PI() {
                   </motion.p>
                 ))}
               </div>
-              
             </div>
 
             <button
-                onClick={(e) => {e.stopPropagation();onSubmit()}}
-                className=" bg-primary text-center flex  mx-auto my-4 w-32 xs:w-48 min-w-max rounded-xl py-2 justify-center  text-text hover:bg-accent hover:shadow-md transition-all duration-300 font-semibold "
-              >
-                Submit
-              </button>
+              onClick={(e) => {
+                e.stopPropagation();
+                onSubmit();
+              }}
+              className=" bg-primary text-center flex  mx-auto my-4 w-32 xs:w-48 min-w-max rounded-xl py-2 justify-center  text-text hover:bg-accent hover:shadow-md transition-all duration-300 font-semibold "
+            >
+              Submit
+            </button>
             <div className="flex text-4xl mx-auto text-center w-fit animate-show">
-              <MathJaxContext config={{loader: { load: ["input/asciimath"] }}}><MathJax className="animate-show" key={equation}>`{equation}`</MathJax></MathJaxContext>
+              <MathJaxContext
+                config={{ loader: { load: ["input/asciimath"] } }}
+              >
+                <MathJax className="animate-show" key={equation}>
+                  `{equation}`
+                </MathJax>
+              </MathJaxContext>
             </div>
           </div>
           <LoadingScreen loading={loading} />
@@ -291,7 +299,7 @@ export default function PI() {
             game={GAMES.MAKINATOR_PI}
             statistics={{
               time,
-              digits: currentPI.length-6,
+              digits: currentPI.length - 6,
               lives,
               score: calculateScore(),
             }}
@@ -305,7 +313,7 @@ export default function PI() {
                 (a: PIStatistics, b: PIStatistics) => b.score - a.score,
               )[0] ?? {
                 time,
-                digits: currentPI.length-6,
+                digits: currentPI.length - 6,
                 lives,
                 score: calculateScore(),
               }

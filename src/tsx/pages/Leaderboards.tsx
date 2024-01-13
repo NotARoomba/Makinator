@@ -5,6 +5,7 @@ import { callAPI } from "../utils/Functions";
 import AlertModal from "../components/AlertModal";
 import LoadingScreen from "../components/LoadingScreen";
 import LinkButton from "../components/LinkButton";
+import { User } from "react-feather";
 
 export default function Leaderboards() {
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,6 @@ export default function Leaderboards() {
         setLoading(false);
         return setAlert("There was an error fetching the highscores!");
       }
-      console.log(res.highscores);
       setHighscores(res.highscores);
       setLoading(false);
     });
@@ -53,7 +53,7 @@ export default function Leaderboards() {
               <tr className="py-8 text-xl md:text-2xl">
                 <th className="text-red">Rank</th>
                 <th className="text-green">Score</th>
-                <th className="text-secondary">Username</th>
+                <th className="text-secondary">User</th>
               </tr>
             </thead>
             <tbody>
@@ -69,13 +69,26 @@ export default function Leaderboards() {
                           : i == 1
                             ? " text-[#b4b4b4]"
                             : i == 2
-                              ? " text-[#6a3805]"
+                              ? " text-[#77502a]"
                               : " text-text")
                       }
                     >
                       <td className="py-2">{i + 1}</td>
                       <td>{score.score}</td>
-                      <td>{score.username}</td>
+                      <td className="sm:flex my-auto align-middle text-center justify-center">
+                        {" "}
+                        {score.avatar !== "" ? (
+                          <img
+                            src={score.avatar}
+                            className="rounded-xl max-w-12 my-auto mx-auto sm:mx-0"
+                          />
+                        ) : (
+                          <User size={48} />
+                        )}
+                        <p className="align-middle my-auto mx-auto sm:mx-2 min-w-fit text-center">
+                          {score.username}
+                        </p>
+                      </td>
                     </tr>
                   );
                 })

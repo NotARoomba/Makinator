@@ -69,18 +69,19 @@ export default function Login() {
           <div className="text-2xl justify-center mx-auto flex flex-col">
             <p>Email</p>
             <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  parseLogin();
-                }}
-              >
-            <input
-              value={email}
-              onChange={(e) =>
-                setEmail(e.currentTarget.value.toLocaleLowerCase())
-              }
-              className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
-            /></form>
+              onSubmit={(e) => {
+                e.preventDefault();
+                parseLogin();
+              }}
+            >
+              <input
+                value={email}
+                onChange={(e) =>
+                  setEmail(e.currentTarget.value.toLocaleLowerCase())
+                }
+                className="mx-auto my-2 bg-transparent text-center outline rounded outline-primary"
+              />
+            </form>
             <Link
               to="/signup"
               className="text-secondary text-center text-lg hover:underline transition-all duration-300 w-fit mx-auto "

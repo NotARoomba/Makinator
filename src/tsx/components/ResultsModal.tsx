@@ -40,7 +40,11 @@ export default function ResultsModal({
         </div> */}
         <p className="text-6xl font-bold mt-2 text-[#1B998B]">Game Over</p>
         <p className="text-2xl ">
-          {'guesses' in statistics ? `You ${statistics.lives == 0 ? "did not" : "did"} guess the number!` : `You guessed ${statistics.digits} digits of PI!`}
+          {"guesses" in statistics
+            ? `You ${
+                statistics.lives == 0 ? "did not" : "did"
+              } guess the number!`
+            : `You guessed ${statistics.digits} digits of PI!`}
         </p>
         <div className="flex text-center justify-center text-lg my-2">
           <div className="w-1/3 font-bold">
@@ -48,7 +52,9 @@ export default function ResultsModal({
             <p>{new Date(highscore.time * 1000).toISOString().slice(11, 19)}</p>
             <p>{highscore.score}</p>
             <p>{highscore.lives}</p>
-            <p>{'guesses' in highscore ? highscore.guesses : highscore.digits}</p>
+            <p>
+              {"guesses" in highscore ? highscore.guesses : highscore.digits}
+            </p>
           </div>
           <div className="w-1/6 font-bold text-secondary-300">
             <p className=" text-xl text-text text-center ">_</p>
@@ -64,7 +70,9 @@ export default function ResultsModal({
             </p>
             <p>{statistics.score}</p>
             <p>{statistics.lives}</p>
-            <p>{'guesses' in statistics ? statistics.guesses : statistics.digits}</p>
+            <p>
+              {"guesses" in statistics ? statistics.guesses : statistics.digits}
+            </p>
           </div>
         </div>
         {!localStorage.getItem("userID") ? (
