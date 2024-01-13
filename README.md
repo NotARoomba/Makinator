@@ -1,6 +1,6 @@
 <div align="center">
   <br>
-  <img src="https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/logo.png" alt="Makinator" width="200">
+  <img src="https://raw.githubusercontent.com/NotARoomba/Makinator/master/public/logo.png" alt="Makinator" width="200">
   <br>
   <h1>Makinator</h1>
 </div>
@@ -9,7 +9,7 @@
 
 <div align="center">
   
-![React](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
