@@ -154,7 +154,7 @@ export default function Guess() {
   return (
     <Transitions>
       <div className="bg-transparent text-text h-[calc(100%-80px)] my-auto flex">
-        <div className="m-auto align-middle justify-center mt-20">
+        <div className="m-auto align-middle justify-center mt-20 mb-4 sm:mb-0">
           <div className="mx-auto justify-center w-full align-middle text-center">
             <p className="text-4xl mt-4 mb-0 font-semibold">Guess the Number</p>
             <p className="text-xl">
@@ -216,7 +216,7 @@ export default function Guess() {
               </div>
             </div>
           )}
-          <div className="flex justify-center mx-auto flex-col text-center">
+          <div className="flex justify-center mx-auto flex-col text-center mb-8 lg:mb-0">
             <p className="text-4xl my-4 mb-0 font-semibold">Guess</p>
             <div className="flex gap-8 justify-center mx-auto my-4 flex-wrap gap-y-4">
               {Object.values(GuessTypes)

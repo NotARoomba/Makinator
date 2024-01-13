@@ -83,7 +83,11 @@ export default function Leaderboards() {
                             className="rounded-xl max-w-12 my-auto mx-auto sm:mx-0"
                           />
                         ) : (
-                          <User size={48} color="#ffffff" />
+                          <User
+                            size={48}
+                            color="#ffffff"
+                            className="mx-auto sm:mx-0 justify-center"
+                          />
                         )}
                         <p className="align-middle my-auto mx-auto sm:mx-2 min-w-fit text-center">
                           {score.username}

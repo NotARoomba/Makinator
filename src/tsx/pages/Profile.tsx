@@ -80,7 +80,7 @@ export default function Profile() {
         </div>
         <hr className="w-1/2 lg:w-3/4 mx-auto border-background-800 my-3 border-2"></hr>
         <div className="flex flex-col lg:flex-col-reverse">
-          <div className="flex gap-8 mx-auto flex-wrap justify-center lg: mb-6">
+          <div className="flex gap-8 mx-auto flex-wrap justify-center lg:mb-6">
             <LinkButton text="Edit Profile" action={() => setEditModal(true)} />
             <LinkButton text="Logout" action={() => setLogoutModal(true)} />
           </div>

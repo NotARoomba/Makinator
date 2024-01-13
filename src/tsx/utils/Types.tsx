@@ -9,7 +9,7 @@ export enum GuessTypes {
   MULTIPLE = "Is the number a multiple of x?",
   ISEVEN = "Is the number even?",
   ISPRIME = "Is the number a prime number?",
-  FACTORS = "Is the number composed of x factors?",
+  FACTORS = "Is the number made of x factors?",
   LESSTHAN = "Is the number less than x?",
   GREATERTHAN = "Is the number greater than x?",
 }
