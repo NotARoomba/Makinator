@@ -1,4 +1,4 @@
-import Transitions from "../components/Transitions";
+import Transitions from "../components/effects/Transitions";
 
 export default function Home() {
   return (

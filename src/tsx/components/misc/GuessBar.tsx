@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GuessBarProps } from "../utils/Types";
+import { GuessBarProps } from "../../utils/Types";
 
 export default function GuessBar({ guessType, onClick }: GuessBarProps) {
   const [inputValue, setInputValue] = useState("");

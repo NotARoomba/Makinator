@@ -9,7 +9,7 @@ import Guess from "./tsx/pages/Guess.tsx";
 import Login from "./tsx/pages/Login.tsx";
 import Signup from "./tsx/pages/Signup.tsx";
 import Profile from "./tsx/pages/Profile.tsx";
-import NavbarWrapper from "./tsx/components/NavbarWrapper.tsx";
+import NavbarWrapper from "./tsx/components/navbar/NavbarWrapper.tsx";
 import Leaderboards from "./tsx/pages/Leaderboards.tsx";
 import PI from "./tsx/pages/PI.tsx";
 

@@ -1,5 +1,5 @@
 import { Triangle } from "react-loader-spinner";
-import { LoadingScreenProps } from "../utils/Types";
+import { LoadingScreenProps } from "../../utils/Types";
 
 export default function LoadingScreen({ loading }: LoadingScreenProps) {
   return (

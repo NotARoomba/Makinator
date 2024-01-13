@@ -1,10 +1,10 @@
-import { STATUS_CODES, VerificationModalProps } from "../utils/Types";
+import { STATUS_CODES, VerificationModalProps } from "../../utils/Types";
 import Modal from "react-modal";
-import LinkButton from "./LinkButton";
-import { callAPI } from "../utils/Functions";
+import LinkButton from "../misc/LinkButton";
+import { callAPI } from "../../utils/Functions";
 import { useState } from "react";
 import AlertModal from "./AlertModal";
-import LoadingScreen from "./LoadingScreen";
+import LoadingScreen from "../effects/LoadingScreen";
 
 export default function VerificationModal({
   email,

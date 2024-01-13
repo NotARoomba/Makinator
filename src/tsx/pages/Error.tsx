@@ -1,5 +1,5 @@
-import NavButton from "../components/NavButton";
-import Transitions from "../components/Transitions";
+import NavButton from "../components/navbar/NavButton";
+import Transitions from "../components/effects/Transitions";
 
 export default function Error() {
   return (

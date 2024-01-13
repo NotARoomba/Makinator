@@ -3,11 +3,11 @@ import { callAPI, checkIfLogin } from "../utils/Functions";
 import { useNavigate } from "react-router-dom";
 import { HelpCircle, PieChart, User as UserIcon } from "react-feather";
 import { GAMES, GameStats, STATUS_CODES, User } from "../utils/Types";
-import AlertModal from "../components/AlertModal";
-import LoadingScreen from "../components/LoadingScreen";
-import HighScoreBlock from "../components/HighscoreBlock";
-import LinkButton from "../components/LinkButton";
-import EditModal from "../components/EditModal";
+import AlertModal from "../components/modals/AlertModal";
+import LoadingScreen from "../components/effects/LoadingScreen";
+import HighScoreBlock from "../components/misc/HighscoreBlock";
+import LinkButton from "../components/misc/LinkButton";
+import EditModal from "../components/modals/EditModal";
 
 export default function Profile() {
   const navigate = useNavigate();

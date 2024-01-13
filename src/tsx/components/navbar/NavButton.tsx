@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { NavButtonProps } from "../utils/Types";
+import { NavButtonProps } from "../../utils/Types";
 
 export default function NavButton({ route, text }: NavButtonProps) {
   const location = useLocation();

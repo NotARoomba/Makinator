@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 
-import { AlertModalProps } from "../utils/Types";
+import { AlertModalProps } from "../../utils/Types";
 import { AlertCircle, CheckCircle, Info, XCircle } from "react-feather";
 
 export default function AlertModal({

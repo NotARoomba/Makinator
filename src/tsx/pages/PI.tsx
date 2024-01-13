@@ -1,12 +1,12 @@
 import { createRef, useEffect, useState } from "react";
 import raw from "/pi.txt";
 import { GAMES, PIStatistics } from "../utils/Types";
-import Transitions from "../components/Transitions";
-import AlertModal from "../components/AlertModal";
+import Transitions from "../components/effects/Transitions";
+import AlertModal from "../components/modals/AlertModal";
 import { AnimatePresence, motion } from "framer-motion";
 import { callAPI, generateProblem } from "../utils/Functions";
-import LoadingScreen from "../components/LoadingScreen";
-import ResultsModal from "../components/ResultsModal";
+import LoadingScreen from "../components/effects/LoadingScreen";
+import ResultsModal from "../components/modals/ResultsModal";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 
 export default function PI() {

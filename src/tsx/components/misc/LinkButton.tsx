@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { LinkButtonProps } from "../utils/Types";
+import { LinkButtonProps } from "../../utils/Types";
 
 export default function LinkButton({
   route,

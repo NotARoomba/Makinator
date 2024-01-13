@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import LinkButton from "../components/LinkButton";
+import LinkButton from "../components/misc/LinkButton";
 import { callAPI, checkIfLogin } from "../utils/Functions";
 import { STATUS_CODES } from "../utils/Types";
-import AlertModal from "../components/AlertModal";
-import VerificationModal from "../components/VerificationModal";
+import AlertModal from "../components/modals/AlertModal";
+import VerificationModal from "../components/modals/VerificationModal";
 import { Link, useNavigate } from "react-router-dom";
-import Transitions from "../components/Transitions";
-import LoadingScreen from "../components/LoadingScreen";
+import Transitions from "../components/effects/Transitions";
+import LoadingScreen from "../components/effects/LoadingScreen";
 
 export default function Login() {
   const navigate = useNavigate();

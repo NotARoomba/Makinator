@@ -1,4 +1,4 @@
-import { HighScoreBlockProps } from "../utils/Types";
+import { HighScoreBlockProps } from "../../utils/Types";
 
 export default function HighScoreBlock({
   name,

@@ -1,11 +1,11 @@
 import Modal from "react-modal";
-import { BaseModalProps, STATUS_CODES } from "../utils/Types";
+import { BaseModalProps, STATUS_CODES } from "../../utils/Types";
 import AlertModal from "./AlertModal";
-import LinkButton from "./LinkButton";
-import LoadingScreen from "./LoadingScreen";
+import LinkButton from "../misc/LinkButton";
+import LoadingScreen from "../effects/LoadingScreen";
 import { ChangeEvent, createRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { callAPI, checkIfLogin, convertToBase64 } from "../utils/Functions";
+import { callAPI, checkIfLogin, convertToBase64 } from "../../utils/Functions";
 import VerificationModal from "./VerificationModal";
 import { Edit2, User } from "react-feather";
 

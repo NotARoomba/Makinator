@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Transitions from "../components/Transitions";
+import Transitions from "../components/effects/Transitions";
 import { GAMES, HighScore, STATUS_CODES } from "../utils/Types";
 import { callAPI } from "../utils/Functions";
-import AlertModal from "../components/AlertModal";
-import LoadingScreen from "../components/LoadingScreen";
-import LinkButton from "../components/LinkButton";
+import AlertModal from "../components/modals/AlertModal";
+import LoadingScreen from "../components/effects/LoadingScreen";
+import LinkButton from "../components/misc/LinkButton";
 import { User } from "react-feather";
 
 export default function Leaderboards() {

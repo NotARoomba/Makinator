@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import AlertModal from "../components/AlertModal";
+import AlertModal from "../components/modals/AlertModal";
 import { GAMES, GuessList, GuessStatistics, GuessTypes } from "../utils/Types";
-import GuessBar from "../components/GuessBar";
+import GuessBar from "../components/misc/GuessBar";
 import { callAPI, getFactors, isPrime } from "../utils/Functions";
-import ResultsModal from "../components/ResultsModal";
-import Transitions from "../components/Transitions";
-import LoadingScreen from "../components/LoadingScreen";
+import ResultsModal from "../components/modals/ResultsModal";
+import Transitions from "../components/effects/Transitions";
+import LoadingScreen from "../components/effects/LoadingScreen";
 
 export default function Guess() {
   // robot thinks of a number and the user tries to guess it using clues

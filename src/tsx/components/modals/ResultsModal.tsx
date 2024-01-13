@@ -1,6 +1,6 @@
 import Modal from "react-modal";
-import { GAMES, ResultsModalProps } from "../utils/Types";
-import LinkButton from "./LinkButton";
+import { GAMES, ResultsModalProps } from "../../utils/Types";
+import LinkButton from "../misc/LinkButton";
 
 export default function ResultsModal({
   game,
