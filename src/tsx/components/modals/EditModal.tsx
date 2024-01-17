@@ -57,8 +57,12 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
         ].includes(file.name.split(".").reverse()[0].toLowerCase())
       )
         return setAlert("That is not a valid image file!");
-      const base64 = await convertToBase64(file);
-      setAvatar(base64);
+        try {
+          const base64 = await convertToBase64(file);
+          setAvatar(base64);
+        } catch(e) {
+          alert(e);
+        }
     }
   };
   const updateUser = async (v: boolean) => {
