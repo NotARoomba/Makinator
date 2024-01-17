@@ -47,6 +47,7 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
         ![
           "jpg",
           "jpeg",
+          "png",
           "bmp",
           "gif",
           "svg",
@@ -57,12 +58,8 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
         ].includes(file.name.split(".").reverse()[0].toLowerCase())
       )
         return setAlert("That is not a valid image file!");
-        try {
-          const base64 = await convertToBase64(file);
-          setAvatar(base64);
-        } catch(e) {
-          alert(e);
-        }
+      const base64 = await convertToBase64(file);
+      setAvatar(base64);
     }
   };
   const updateUser = async (v: boolean) => {
@@ -100,7 +97,10 @@ export default function EditModal({ isOpen, setIsOpen }: BaseModalProps) {
           onClick={() => inputRef.current?.click()}
         >
           {avatar !== "" ? (
-            <img src={avatar} className="rounded-xl max-w-32 group" />
+            <img
+              src={avatar}
+              className="rounded-xl max-w-fit max-h-32 h-fit group"
+            />
           ) : (
             <User size={125} />
           )}

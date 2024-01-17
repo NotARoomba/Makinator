@@ -58,8 +58,12 @@ export async function callAPI(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.log(error);
-    if (!error.response) return { status: STATUS_CODES.NO_CONNECTION };
-    // Alert.alert('Error!', 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.')
+    if (!error.response) {
+      alert(
+        "We couldn't connect to the server! Please check your internet connection.",
+      );
+      return { status: STATUS_CODES.NO_CONNECTION };
+    }
     return {
       status: STATUS_CODES.GENERIC_ERROR,
     };
