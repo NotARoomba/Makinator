@@ -25,14 +25,11 @@ export default function Profile() {
           navigate("/login");
           return navigate(0);
         }
-        callAPI(`/games/${user._id}/highscores`, "POST", {
-          userID: user._id,
-          types: [
-            GAMES.MAKINATOR_GUESS,
-            GAMES.MAKINATOR_PI,
-            GAMES.MAKINATOR_ONLINE,
-          ],
-        }).then((res) => {
+        callAPI(`/users/${user._id}/highscores?gameTypes=${[
+          GAMES.MAKINATOR_GUESS,
+          GAMES.MAKINATOR_PI,
+          GAMES.MAKINATOR_ONLINE,
+        ].join("&gameTypes=")}`, "GET").then((res) => {
           if (res.status !== STATUS_CODES.SUCCESS) return setErrorModal(true);
           setHighscores(res.highscores ?? []);
         });

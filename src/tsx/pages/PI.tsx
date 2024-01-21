@@ -132,10 +132,7 @@ export default function PI() {
             score: calculateScore(),
           },
         }).then(() => {
-          callAPI(`/games/${userID}/highscore`, "POST", {
-            userID,
-            type: GAMES.MAKINATOR_PI,
-          }).then((res) => {
+          callAPI(`/users/${userID}/highscore?gameType=${GAMES.MAKINATOR_PI}`, "GET").then((res) => {
             setHighscore(res.highscore);
             setLoading(false);
             setGameOverModal(true);

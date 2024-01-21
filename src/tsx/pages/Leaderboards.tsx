@@ -20,7 +20,7 @@ export default function Leaderboards() {
   useEffect(() => {
     setLoading(true);
     console.log(gameType);
-    callAPI("/games/highscores", "POST", { type: gameType }).then((res) => {
+    callAPI(`/games/${gameType}/highscores`, "GET").then((res) => {
       if (res.status !== STATUS_CODES.SUCCESS) {
         setLoading(false);
         return setAlert("There was an error fetching the highscores!");

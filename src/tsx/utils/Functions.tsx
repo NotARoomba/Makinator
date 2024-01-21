@@ -71,11 +71,11 @@ export async function callAPI(
 }
 
 export async function checkIfLogin(): Promise<false | User> {
-  const userID = localStorage.getItem("userID");
+  const userID = getCookie("userID");
   if (!userID) return false;
   const validUser = await callAPI(`/users/${userID}`, "GET");
   if (validUser.status === STATUS_CODES.USER_NOT_FOUND) {
-    localStorage.clear();
+    setCookie("userID", null);
     return false;
   }
   return validUser.user;
@@ -130,4 +130,15 @@ export function generateProblem(digit: number, guesses: number) {
     } while (a * digit + b != c);
   }
   return equation;
+}
+
+export function setCookie(key: string, value: string | null) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
+  document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+}
+
+export function getCookie(key: string) {
+  const keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+  return keyValue ? keyValue[2] : null;
 }

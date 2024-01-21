@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import LinkButton from "../components/misc/LinkButton";
-import { callAPI, checkIfLogin } from "../utils/Functions";
+import { callAPI, checkIfLogin, setCookie } from "../utils/Functions";
 import { STATUS_CODES } from "../utils/Types";
 import AlertModal from "../components/modals/AlertModal";
 import VerificationModal from "../components/modals/VerificationModal";
@@ -43,8 +43,7 @@ export default function Login() {
     setAlert("You are now logged in!", "Success");
     const res = await callAPI(`/users/${email}`, "GET");
     if (res.status === STATUS_CODES.SUCCESS) {
-      localStorage.clear();
-      localStorage.setItem("userID", res.user._id);
+      setCookie("userID", res.user._id);
       navigate("/");
       navigate(0);
     } else {

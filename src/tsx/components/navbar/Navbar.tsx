@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NavButton from "./NavButton";
 import { useRef, useState } from "react";
+import { getCookie } from "../../utils/Functions";
 
 export default function Navbar() {
   const [menu, setM] = useState(false);
@@ -61,7 +62,7 @@ export default function Navbar() {
         <div className="justify-left hidden lg:flex text-lg text-gray gap-4 mx-4">
           <NavButton route="/play" text="Play" />
           <NavButton route="/leaderboards" text="Leaderboards" />
-          {localStorage.getItem("userID") ? (
+          {getCookie("userID") ? (
             <NavButton route="/profile" text="Profile" />
           ) : (
             <NavButton route="/login" text="Login" />
