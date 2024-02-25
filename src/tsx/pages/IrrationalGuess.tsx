@@ -1,5 +1,6 @@
 import { createRef, useEffect, useState } from "react";
-import raw from "/pi.txt";
+import pi from "/pi.txt";
+import e from "/pi.txt";
 import { GAMES, IrrationalGuessProps, IrrationalGuessStatistics } from "../utils/Types";
 import Transitions from "../components/effects/Transitions";
 import AlertModal from "../components/modals/AlertModal";
@@ -49,7 +50,7 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
   };
 
   const resetGame = () => {
-    fetch(raw)
+    fetch(gameType === GAMES.MAKINATOR_PI ? pi : e)
       .then((r) => r.text())
       .then((text) => {
         const splitted = text.split(".");
