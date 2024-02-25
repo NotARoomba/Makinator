@@ -1,6 +1,6 @@
 import { createRef, useEffect, useState } from "react";
 import raw from "/pi.txt";
-import { GAMES, PIStatistics } from "../utils/Types";
+import { GAMES, IrrationalGuessProps, IrrationalGuessStatistics } from "../utils/Types";
 import Transitions from "../components/effects/Transitions";
 import AlertModal from "../components/modals/AlertModal";
 import { AnimatePresence, motion } from "framer-motion";
@@ -9,17 +9,17 @@ import LoadingScreen from "../components/effects/LoadingScreen";
 import ResultsModal from "../components/modals/ResultsModal";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 
-export default function PI() {
+export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
   //try to guess the digits of pi using mathmatical formulas as hints
-  const [PI, setPI] = useState<string[]>(["1"]);
-  const [currentPI, setCurrentPI] = useState<string[]>("    3.".split(""));
+  const [numberToGuess, setNumberToGuess] = useState<string[]>(["1"]);
+  const [currentGuesses, setCurrentGuesses] = useState<string[]>("    3.".split(""));
   const [lives, setLives] = useState(3);
   const [inputValue, setInputValue] = useState("");
   const [errModal, setErrModal] = useState(false);
   const [wrongGuess, setWrongGuess] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [gameOverModal, setGameOverModal] = useState(false);
-  const [highscore, setHighscore] = useState<PIStatistics>();
+  const [highscore, setHighscore] = useState<IrrationalGuessStatistics>();
   const [loading, setLoading] = useState(false);
   const [equation, setEquation] = useState("");
   const [time, setTime] = useState(0);
@@ -52,20 +52,21 @@ export default function PI() {
     fetch(raw)
       .then((r) => r.text())
       .then((text) => {
-        setPI(text.split(""));
+        const splitted = text.split(".");
+        setCurrentGuesses(`    ${splitted[0]}.`.split(""));
+        setNumberToGuess(splitted[1].split(""));
       });
     setTime(0);
     setGameOver(false);
     setGameOverModal(false);
     setInputValue("");
-    setCurrentPI("    3.".split(""));
-    setEquation(generateProblem(parseInt(PI[0]), currentPI.length - 6));
+    setEquation(generateProblem(parseInt(numberToGuess[0]), currentGuesses.length - 6));
     setLives(3);
   };
   const onSubmit = () => {
     if (inputValue === "") setErrModal(true);
     else if (gameOver) setGameOverModal(true);
-    else if (inputValue != PI[0]) {
+    else if (inputValue != numberToGuess[0]) {
       setWrongGuess(true);
       setTimeout(() => setWrongGuess(false), 1000);
       if (lives - 1 < 0) setLives(0);
@@ -75,11 +76,11 @@ export default function PI() {
       }
     } else {
       inputRef.current?.focus();
-      const digit = PI.shift();
-      setPI(PI);
+      const digit = numberToGuess.shift();
+      setNumberToGuess(numberToGuess);
       setInputValue("");
-      setCurrentPI([...currentPI, digit ?? "0"]);
-      setEquation(generateProblem(parseInt(PI[0]), currentPI.length - 6));
+      setCurrentGuesses([...currentGuesses, digit ?? "0"]);
+      setEquation(generateProblem(parseInt(numberToGuess[0]), currentGuesses.length - 6));
     }
   };
   useEffect(() => {
@@ -94,12 +95,12 @@ export default function PI() {
     ) {
       const converted = parseInt(input.currentTarget.value);
       // can be exploited
-      // if (input.currentTarget.value == PI[0]) {
-      //   const digit = PI.shift();
-      //   setPI(PI);
+      // if (input.currentTarget.value == numberToGuess[0]) {
+      //   const digit = numberToGuess.shift();
+      //   setNumberToGuess(numberToGuess);
       //   setInputValue("");
-      //   setCurrentPI([...currentPI, digit ?? "0"]);
-      //   return setEquation(generateProblem(parseInt(PI[0]),currentPI.length-6))
+      //   setCurrentGuesses([...currentGuesses, digit ?? "0"]);
+      //   return setEquation(generateProblem(parseInt(numberToGuess[0]),currentGuesses.length-6))
       // }
       setInputValue(converted.toString() == "NaN" ? "" : converted.toString());
     }
@@ -114,7 +115,7 @@ export default function PI() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time, gameOver]);
   const calculateScore = () => {
-    return 200 * (currentPI.length - 6) * 3 ** lives;
+    return 200 * (currentGuesses.length - 6) * 3 ** lives;
   };
   useEffect(() => {
     //save to localstoer array or online if have acc
@@ -124,15 +125,15 @@ export default function PI() {
         setLoading(true);
         callAPI("/games/update", "POST", {
           userID,
-          type: GAMES.MAKINATOR_PI,
+          type: gameType,
           game: {
             time,
-            digits: currentPI.length - 6,
+            digits: currentGuesses.length - 6,
             lives,
             score: calculateScore(),
           },
         }).then(() => {
-          callAPI(`/users/${userID}/highscore?gameType=${GAMES.MAKINATOR_PI}`, "GET").then((res) => {
+          callAPI(`/users/${userID}/highscore?gameType=${gameType}`, "GET").then((res) => {
             setHighscore(res.highscore);
             setLoading(false);
             setGameOverModal(true);
@@ -140,31 +141,31 @@ export default function PI() {
         });
       } else {
         const prevGames = JSON.parse(
-          localStorage.getItem("piStatistics") ?? "[]",
+          localStorage.getItem(gameType === GAMES.MAKINATOR_PI ? "piStatistics" : "eStatistics") ?? "[]",
         );
         if (prevGames == null) {
           localStorage.setItem(
-            "piStatistics",
+            gameType === GAMES.MAKINATOR_PI ? "piStatistics" : "eStatistics",
             JSON.stringify([
               {
                 time,
-                digits: currentPI.length - 6,
+                digits: currentGuesses.length - 6,
                 lives,
                 score: calculateScore(),
-              } as PIStatistics,
+              } as IrrationalGuessStatistics,
             ]),
           );
         } else {
           localStorage.setItem(
-            "piStatistics",
+            gameType === GAMES.MAKINATOR_PI ? "piStatistics" : "eStatistics",
             JSON.stringify([
               ...prevGames,
               {
                 time,
-                digits: currentPI.length - 6,
+                digits: currentGuesses.length - 6,
                 lives,
                 score: calculateScore(),
-              } as PIStatistics,
+              } as IrrationalGuessStatistics,
             ]),
           );
         }
@@ -176,12 +177,12 @@ export default function PI() {
   return (
     <AnimatePresence>
       <Transitions>
-        <div className="bg-transparent text-text h-[calc(100%-80px)] my-auto flex">
+        <div className="bg-transparent text-text h-[calc(100vh-80px)] my-auto flex overflow-hidden">
           <div className="m-auto align-middle justify-center mt-20">
             <div className="mx-auto justify-center w-full align-middle text-center">
-              <p className="text-4xl mt-4 mb-0 font-semibold">Digits of PI</p>
+              <p className="text-4xl mt-4 mb-0 font-semibold">Digits of {gameType === GAMES.MAKINATOR_PI ? "π" : "e"}</p>
               <p className="text-xl">
-                Guess 1 million digits of PI using equations!
+                Guess 1 million digits of {gameType === GAMES.MAKINATOR_PI ? "π" : "e"} using equations!
               </p>
               <div className="flex">
                 <div className="w-1/3 mx-auto">
@@ -197,7 +198,7 @@ export default function PI() {
                 </p>
                 <div className="w-1/3">
                   <p className="font-bold text-5xl lg:text-7xl text-secondary">
-                    {currentPI.length - 6}
+                    {currentGuesses.length - 6}
                   </p>
                   <p className=" text-lg lg:text-xl">Digits</p>
                 </div>
@@ -205,7 +206,7 @@ export default function PI() {
             </div>
             <div className="flex my-4 mx-auto justify-center w-screen text-center sm:-mt-6 md:-mt-14">
               <div className="flex w-fit translate-x-6">
-                {currentPI.slice(0, -6).map((v, i) => (
+                {currentGuesses.slice(0, -6).map((v, i) => (
                   <p
                     key={i}
                     className={
@@ -219,7 +220,7 @@ export default function PI() {
                   </p>
                 ))}
                 <div className="flex">
-                  {currentPI.slice(-6).map((v, i) => (
+                  {currentGuesses.slice(-6).map((v, i) => (
                     <motion.p
                       custom={{ i, c: true }}
                       variants={variants}
@@ -255,7 +256,7 @@ export default function PI() {
                 />
               </form>
               <div className="flex w-fit">
-                {PI.slice(0, 6).map((v, i) => (
+                {numberToGuess.slice(0, 6).map((v, i) => (
                   <motion.p
                     custom={{ i, c: false }}
                     variants={variants}
@@ -293,10 +294,10 @@ export default function PI() {
           </div>
           <LoadingScreen loading={loading} />
           <ResultsModal
-            game={GAMES.MAKINATOR_PI}
+            game={gameType}
             statistics={{
               time,
-              digits: currentPI.length - 6,
+              digits: currentGuesses.length - 6,
               lives,
               score: calculateScore(),
             }}
@@ -304,13 +305,13 @@ export default function PI() {
               highscore ??
               (
                 JSON.parse(
-                  localStorage.getItem("piStatistics") ?? "[]",
-                ) as PIStatistics[]
+                  localStorage.getItem(gameType === GAMES.MAKINATOR_PI ? "piStatistics" : "eStatistics") ?? "[]",
+                ) as IrrationalGuessStatistics[]
               ).sort(
-                (a: PIStatistics, b: PIStatistics) => b.score - a.score,
+                (a: IrrationalGuessStatistics, b: IrrationalGuessStatistics) => b.score - a.score,
               )[0] ?? {
                 time,
-                digits: currentPI.length - 6,
+                digits: currentGuesses.length - 6,
                 lives,
                 score: calculateScore(),
               }

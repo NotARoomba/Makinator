@@ -46,7 +46,7 @@ export interface GuessStatistics extends BaseStatistics {
   guesses: number;
 }
 
-export interface PIStatistics extends BaseStatistics {
+export interface IrrationalGuessStatistics extends BaseStatistics {
   digits: number;
 }
 
@@ -57,7 +57,7 @@ export interface ResultsModalProps extends BaseModalProps {
   resetGame: () => void;
 }
 
-export type Statistics = GuessStatistics | PIStatistics;
+export type Statistics = GuessStatistics | IrrationalGuessStatistics;
 
 export interface LinkButtonProps {
   text: string;
@@ -83,6 +83,20 @@ export enum STATUS_CODES {
   EMAIL_IN_USE,
   USERNAME_IN_USE,
   NONE_IN_USE,
+  NO_GAME_FOUND,
+  GAME_FULL
+}
+
+export enum NotARoombaEvents {
+  CONNECT = 'connect',
+  DISCONNECT = 'disconnect',
+  REGISTER_USER = 'register_user',
+  JOIN_GAME = 'join_game',
+  CREATE_GAME = 'create_game',
+  UPDATE_GAME_DATA = 'update_game_data',
+  REQUEST_GAME_DATA = 'request_game_data',
+  START_GAME = 'start_game',
+  END_GAME = 'end_game'
 }
 
 export interface VerificationModalProps extends BaseModalProps {
@@ -93,6 +107,7 @@ export interface VerificationModalProps extends BaseModalProps {
 export enum GAMES {
   MAKINATOR_GUESS = "makinatorData.guessGames",
   MAKINATOR_PI = "makinatorData.piGames",
+  MAKINATOR_E = "makinatorData.eGames",
   MAKINATOR_ONLINE = "makinatorData.onlineGames",
 }
 
@@ -132,4 +147,8 @@ export interface HighScore {
   avatar: string;
   score: number;
   time: number;
+}
+
+export interface IrrationalGuessProps {
+  gameType: GAMES.MAKINATOR_PI | GAMES.MAKINATOR_E
 }

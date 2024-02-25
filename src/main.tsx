@@ -11,7 +11,10 @@ import Signup from "./tsx/pages/Signup.tsx";
 import Profile from "./tsx/pages/Profile.tsx";
 import NavbarWrapper from "./tsx/components/navbar/NavbarWrapper.tsx";
 import Leaderboards from "./tsx/pages/Leaderboards.tsx";
-import PI from "./tsx/pages/PI.tsx";
+import Online from "./tsx/pages/Online.tsx";
+import OnlineGame from "./tsx/pages/OnlineGame.tsx";
+import IrrationalGuess from "./tsx/pages/IrrationalGuess.tsx";
+import { GAMES } from "./tsx/utils/Types.tsx";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +39,22 @@ const router = createBrowserRouter([
       },
       {
         path: "/play/pi",
-        element: <PI />,
+        element: <IrrationalGuess gameType={GAMES.MAKINATOR_PI} />,
+        errorElement: <Error />,
+      },
+      {
+        path: "/play/e",
+        element: <IrrationalGuess  gameType={GAMES.MAKINATOR_E} />,
+        errorElement: <Error />,
+      },
+      {
+        path: "/play/online",
+        element: <Online />,
+        errorElement: <Error />,
+      },
+      {
+        path: "/play/online/:gameID",
+        element: <OnlineGame />,
         errorElement: <Error />,
       },
       {

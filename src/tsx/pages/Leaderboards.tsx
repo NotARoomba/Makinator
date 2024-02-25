@@ -37,7 +37,8 @@ export default function Leaderboards() {
           <div className="flex justify-center gap-8 mb-4">
             {[
               { "Guess the Number": GAMES.MAKINATOR_GUESS },
-              { "Digits of PI": GAMES.MAKINATOR_PI },
+              { "Digits of π": GAMES.MAKINATOR_PI },
+              { "Digits of e": GAMES.MAKINATOR_E },
               // { "Online Play": GAMES.MAKINATOR_ONLINE },
             ].map((v, i) => (
               <LinkButton

@@ -28,6 +28,7 @@ export default function Profile() {
         callAPI(`/users/${user._id}/highscores?gameTypes=${[
           GAMES.MAKINATOR_GUESS,
           GAMES.MAKINATOR_PI,
+          GAMES.MAKINATOR_E,
           GAMES.MAKINATOR_ONLINE,
         ].join("&gameTypes=")}`, "GET").then((res) => {
           if (res.status !== STATUS_CODES.SUCCESS) return setErrorModal(true);
@@ -92,8 +93,14 @@ export default function Profile() {
             <HighScoreBlock
               icon={<PieChart size={50} className="mx-auto text-secondary" />}
               highscore={highscores[1]?.game?.score ?? 0}
-              name="Digits of PI"
+              name="Digits of π"
               gamesPlayed={highscores[1]?.gamesPlayed ?? 0}
+            />
+            <HighScoreBlock
+              icon={<PieChart size={50} className="mx-auto text-secondary" />}
+              highscore={highscores[2]?.game?.score ?? 0}
+              name="Digits of e"
+              gamesPlayed={highscores[2]?.gamesPlayed ?? 0}
             />
             {/* <HighScoreBlock
               icon={<Wifi size={50} className="mx-auto text-secondary" />}

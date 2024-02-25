@@ -10,8 +10,9 @@ export default function Play() {
           <p className="text-4xl font-semibold text-center my-4">Game Modes</p>
           <div className="mx-auto justify-center flex flex-wrap">
             <NavButton route="/play/guess" text="Guess the Number" />
-            <NavButton route="/play/pi" text="Digits of PI" />
-            {/* <NavButton route="/play/online" text="Online Play" /> */}
+            <NavButton route="/play/pi" text="Digits of π" />
+            <NavButton route="/play/e" text="Digits of e" />
+            <NavButton route="/play/online" text="Online Play" />
           </div>
         </div>
       </div>

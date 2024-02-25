@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../NotARoomba-Backend"
+		},
+		{
+			"path": "../NivelesDeNiveles/backend"
+		},
+		{
+			"path": "../ForoTIC-2023/backend"
+		}
+	],
+	"settings": {}
+}
