@@ -15,7 +15,10 @@ import Online from "./tsx/pages/Online.tsx";
 import OnlineGame from "./tsx/pages/OnlineGame.tsx";
 import IrrationalGuess from "./tsx/pages/IrrationalGuess.tsx";
 import { GAMES } from "./tsx/utils/Types.tsx";
-
+import { io } from "socket.io-client";
+export const socket = io("https://api.notaroomba.dev", {
+  transports: ["websocket"],
+});
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,7 +47,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/play/e",
-        element: <IrrationalGuess  gameType={GAMES.MAKINATOR_E} />,
+        element: <IrrationalGuess gameType={GAMES.MAKINATOR_E} />,
         errorElement: <Error />,
       },
       {

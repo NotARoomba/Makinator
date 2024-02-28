@@ -106,7 +106,10 @@ export default function Guess() {
             score: calculateScore(),
           },
         }).then(() => {
-          callAPI(`/users/${userID}/highscore?gameType=${GAMES.MAKINATOR_GUESS}`, "GET").then((res) => {
+          callAPI(
+            `/users/${userID}/highscore?gameType=${GAMES.MAKINATOR_GUESS}`,
+            "GET",
+          ).then((res) => {
             setHighscore(res.highscore);
             setLoading(false);
             setGameOverModal(true);

@@ -1,7 +1,7 @@
 import { Triangle } from "react-loader-spinner";
 import { LoadingScreenProps } from "../../utils/Types";
 
-export default function LoadingScreen({ loading }: LoadingScreenProps) {
+export default function LoadingScreen({ loading, text }: LoadingScreenProps) {
   return (
     <div
       className={
@@ -9,22 +9,30 @@ export default function LoadingScreen({ loading }: LoadingScreenProps) {
         (loading ? " flex animate-show" : " animate-hide")
       }
     >
-      <div className="m-auto">
+      <div className="m-auto flex flex-col">
         <Triangle
           visible={loading}
           height="200"
           width="200"
+          wrapperStyle={{ margin: "auto" }}
           color="#5435cb"
           ariaLabel="triangle-loading"
           wrapperClass={loading ? " flex animate-show" : " animate-hide"}
         />
         {loading && (
-          <div className={"flex mx-auto"}>
+          <div className="flex mx-auto">
             <img src="/logo.png" className="h-14 m-2 rounded-xl" />
             <p className="text-left my-auto mb-5 -ml-3 font-bold text-text text-4xl">
               akinator
             </p>
           </div>
+        )}
+        {text && loading && (
+          <p className="mx-auto text-center text-2xl font-bold">
+            {text.split("\n")[0]}
+            <br />
+            {text.split("\n")[1]}
+          </p>
         )}
       </div>
     </div>

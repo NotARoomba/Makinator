@@ -134,11 +134,11 @@ export function generateProblem(digit: number, guesses: number) {
 
 export function setCookie(key: string, value: string | null) {
   const expires = new Date();
-  expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
-  document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+  expires.setTime(expires.getTime() + 365 * 24 * 60 * 60 * 1000);
+  document.cookie = key + "=" + value + ";expires=" + expires.toUTCString();
 }
 
 export function getCookie(key: string) {
-  const keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+  const keyValue = document.cookie.match("(^|;) ?" + key + "=([^;]*)(;|$)");
   return keyValue ? keyValue[2] : null;
 }

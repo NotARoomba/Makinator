@@ -1,21 +1,39 @@
 import { createRef, useEffect, useState } from "react";
 import pi from "/pi.txt";
-import e from "/pi.txt";
-import { GAMES, IrrationalGuessProps, IrrationalGuessStatistics } from "../utils/Types";
+import e from "/e.txt";
+import {
+  GAMES,
+  IrrationalGuessProps,
+  IrrationalGuessStatistics,
+  NotARoombaEvents,
+} from "../utils/Types";
 import Transitions from "../components/effects/Transitions";
 import AlertModal from "../components/modals/AlertModal";
 import { AnimatePresence, motion } from "framer-motion";
-import { callAPI, generateProblem } from "../utils/Functions";
+import { callAPI, generateProblem, getCookie } from "../utils/Functions";
 import LoadingScreen from "../components/effects/LoadingScreen";
 import ResultsModal from "../components/modals/ResultsModal";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
+import { socket } from "../../main";
+// import { useNavigate } from "react-router-dom";
 
-export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
+export default function IrrationalGuess({
+  gameType,
+  online,
+  initialData,
+}: IrrationalGuessProps) {
   //try to guess the digits of pi using mathmatical formulas as hints
-  const [numberToGuess, setNumberToGuess] = useState<string[]>(["1"]);
-  const [currentGuesses, setCurrentGuesses] = useState<string[]>("    3.".split(""));
-  const [lives, setLives] = useState(3);
+  const [numberToGuess, setNumberToGuess] = useState<string[]>([]);
+  const [currentGuesses, setCurrentGuesses] = useState<string[]>(["      "]);
+  const [gameData, setGameData] = useState<IrrationalGuessStatistics>({
+    score: 0,
+    time: 0,
+    lives: 3,
+    digits: 0,
+  });
+  // const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
+  const [time, setTime] = useState(0);
   const [errModal, setErrModal] = useState(false);
   const [wrongGuess, setWrongGuess] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -23,7 +41,7 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
   const [highscore, setHighscore] = useState<IrrationalGuessStatistics>();
   const [loading, setLoading] = useState(false);
   const [equation, setEquation] = useState("");
-  const [time, setTime] = useState(0);
+  const [gameOverLoading, setGameOverLoading] = useState(false);
   const inputRef = createRef<HTMLInputElement>();
   const variants = {
     initial: ({ i, c }: { i: number; c: boolean }) => ({
@@ -54,25 +72,63 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
       .then((r) => r.text())
       .then((text) => {
         const splitted = text.split(".");
-        setCurrentGuesses(`    ${splitted[0]}.`.split(""));
-        setNumberToGuess(splitted[1].split(""));
+        if (online && initialData) {
+          // socket.emit(
+          //   NotARoombaEvents.REGISTER_USER,
+          //   getCookie("userID"),
+          //   async (onlineGame: OnlineMakinatorGame) => {
+          //     const userData = onlineGame.gameData[getCookie("userID") ?? ""];
+          //     console.log("FETCHED DATA: " + userData.digits);
+          //     setGameData(userData);
+          //     // console.log("BEFORE: " +splitted);
+          //     const dividedNumbers = splitted[1].slice(0, userData.digits);
+          //     console.log(splitted);
+          //     // console.log(dividedNumbers);
+          //     setCurrentGuesses([...`    ${splitted[0]}.`.split(""), ...dividedNumbers.split("")]);
+          //     setNumberToGuess(splitted[1].split(""));
+          //   },
+          // );
+          const userData = initialData.gameData[getCookie("userID") ?? ""];
+          setGameData(userData);
+          const dividedNumbers = splitted[1].slice(0, userData.digits);
+          setCurrentGuesses([
+            ...`    ${splitted[0]}.`.split(""),
+            ...dividedNumbers.split(""),
+          ]);
+          const restOfNumbers = splitted[1].slice(userData.digits).split("");
+          setNumberToGuess(restOfNumbers);
+          setEquation(
+            generateProblem(
+              parseInt(restOfNumbers[0]),
+              currentGuesses.length - 6,
+            ),
+          );
+          if (userData.lives == 0) setGameOverLoading(true);
+        } else {
+          setCurrentGuesses(`    ${splitted[0]}.`.split(""));
+          setEquation(
+            generateProblem(
+              parseInt(splitted[1][0]),
+              currentGuesses.length - 6,
+            ),
+          );
+          setNumberToGuess(splitted[1].split(""));
+        }
       });
-    setTime(0);
+    setGameData({ ...gameData, time: 0, lives: 3 });
     setGameOver(false);
     setGameOverModal(false);
     setInputValue("");
-    setEquation(generateProblem(parseInt(numberToGuess[0]), currentGuesses.length - 6));
-    setLives(3);
   };
   const onSubmit = () => {
     if (inputValue === "") setErrModal(true);
-    else if (gameOver) setGameOverModal(true);
+    else if (gameOver && !online) setGameOverModal(true)
     else if (inputValue != numberToGuess[0]) {
       setWrongGuess(true);
       setTimeout(() => setWrongGuess(false), 1000);
-      if (lives - 1 < 0) setLives(0);
-      else setLives(lives - 1);
-      if (lives - 1 <= 0) {
+      if (gameData.lives - 1 < 0) setGameData({ ...gameData, lives: 0 });
+      else setGameData({ ...gameData, lives: gameData.lives - 1 });
+      if (gameData.lives - 1 <= 0) {
         setGameOver(true);
       }
     } else {
@@ -81,11 +137,14 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
       setNumberToGuess(numberToGuess);
       setInputValue("");
       setCurrentGuesses([...currentGuesses, digit ?? "0"]);
-      setEquation(generateProblem(parseInt(numberToGuess[0]), currentGuesses.length - 6));
+      setEquation(
+        generateProblem(parseInt(numberToGuess[0]), currentGuesses.length - 6),
+      );
     }
   };
   useEffect(() => {
     resetGame();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const inputNumber = (input: React.FormEvent<HTMLInputElement>) => {
@@ -108,19 +167,28 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
   };
   useEffect(() => {
     if (!gameOver) {
-      const interval = setInterval(() => setTime(time + 1), 1000);
+      const interval = setInterval(() => {setTime(time => time +1);}, 1000);
       return () => clearInterval(interval);
-    } else {
+    } else if (gameOver) {
       document.documentElement.style.overflowY = "hidden";
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [time, gameOver]);
+  }, [gameOver]);
   const calculateScore = () => {
-    return 200 * (currentGuesses.length - 6) * 3 ** lives;
+    return 200 * (currentGuesses.length - 6) * 3 ** gameData.lives;
   };
   useEffect(() => {
+    setGameData({ ...gameData, digits: currentGuesses.length - 6, time, score: calculateScore() });
+  }, [currentGuesses]);
+  useEffect(() => {
+    if (online) socket.emit(NotARoombaEvents.UPDATE_GAME_DATA, getCookie("userID"), {
+      ...gameData,
+      time,
+    });
+  }, [gameData]);
+  useEffect(() => {
     //save to localstoer array or online if have acc
-    if (gameOver) {
+    if (gameOver && !online) {
       const userID = localStorage.getItem("userID");
       if (userID) {
         setLoading(true);
@@ -128,13 +196,16 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
           userID,
           type: gameType,
           game: {
-            time,
+            time: gameData.time,
             digits: currentGuesses.length - 6,
-            lives,
+            lives: gameData.lives,
             score: calculateScore(),
           },
         }).then(() => {
-          callAPI(`/users/${userID}/highscore?gameType=${gameType}`, "GET").then((res) => {
+          callAPI(
+            `/users/${userID}/highscore?gameType=${gameType}`,
+            "GET",
+          ).then((res) => {
             setHighscore(res.highscore);
             setLoading(false);
             setGameOverModal(true);
@@ -142,16 +213,18 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
         });
       } else {
         const prevGames = JSON.parse(
-          localStorage.getItem(gameType === GAMES.MAKINATOR_PI ? "piStatistics" : "eStatistics") ?? "[]",
+          localStorage.getItem(
+            gameType === GAMES.MAKINATOR_PI ? "piStatistics" : "eStatistics",
+          ) ?? "[]",
         );
         if (prevGames == null) {
           localStorage.setItem(
             gameType === GAMES.MAKINATOR_PI ? "piStatistics" : "eStatistics",
             JSON.stringify([
               {
-                time,
+                time: gameData.time,
                 digits: currentGuesses.length - 6,
-                lives,
+                lives: gameData.lives,
                 score: calculateScore(),
               } as IrrationalGuessStatistics,
             ]),
@@ -162,9 +235,9 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
             JSON.stringify([
               ...prevGames,
               {
-                time,
+                time: gameData.time,
                 digits: currentGuesses.length - 6,
-                lives,
+                lives: gameData.lives,
                 score: calculateScore(),
               } as IrrationalGuessStatistics,
             ]),
@@ -173,30 +246,50 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
         setGameOverModal(true);
       }
     }
+    else if (online && gameOver) {
+      console.log("END GAME");
+      setGameOverLoading(true)
+      // socket.emit(NotARoombaEvents.END_GAME);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameOver]);
   return (
     <AnimatePresence>
       <Transitions>
-        <div className="bg-transparent text-text h-[calc(100vh-80px)] my-auto flex overflow-hidden">
+        <div
+          className={
+            "bg-transparent text-text my-auto flex overflow-hidden" +
+            (!online ? "h-[calc(100vh-80px)]" : "h-[calc(50vh-40px)]")
+          }
+        >
           <div className="m-auto align-middle justify-center mt-20">
             <div className="mx-auto justify-center w-full align-middle text-center">
-              <p className="text-4xl mt-4 mb-0 font-semibold">Digits of {gameType === GAMES.MAKINATOR_PI ? "π" : "e"}</p>
+              <p className="text-4xl mt-4 mb-0 font-semibold">
+                Digits of {gameType === GAMES.MAKINATOR_PI ? "π" : "e"}
+              </p>
               <p className="text-xl">
-                Guess 1 million digits of {gameType === GAMES.MAKINATOR_PI ? "π" : "e"} using equations!
+                Guess 1 million digits of{" "}
+                {gameType === GAMES.MAKINATOR_PI ? "π" : "e"} using equations!
               </p>
               <div className="flex">
                 <div className="w-1/3 mx-auto">
                   <p className="font-bold text-5xl lg:text-7xl text-secondary text-center">
-                    {lives}
+                    {gameData.lives}
                   </p>
                   <p className=" text-lg lg:text-xl text-wrap w-24 flex mx-auto text-center">
                     Lives Remaining
                   </p>
                 </div>
-                <p className="font-bold text-3xl xs:text-4xl w-1/3 text-secondary ">
-                  {new Date(time * 1000).toISOString().slice(11, 19)}
-                </p>
+                {!online ? (
+                  <p className="font-bold text-3xl xs:text-4xl w-1/3 text-secondary ">
+                    {new Date(time * 1000).toISOString().slice(11, 19)}
+                  </p>
+                ) : (
+                  <p className="font-bold text-3xl xs:text-4xl w-1/3 text-secondary">
+                    {" "}
+                    1v1
+                  </p>
+                )}
                 <div className="w-1/3">
                   <p className="font-bold text-5xl lg:text-7xl text-secondary">
                     {currentGuesses.length - 6}
@@ -297,23 +390,28 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
           <ResultsModal
             game={gameType}
             statistics={{
-              time,
+              time: gameData.time,
               digits: currentGuesses.length - 6,
-              lives,
+              lives: gameData.lives,
               score: calculateScore(),
             }}
             highscore={
               highscore ??
               (
                 JSON.parse(
-                  localStorage.getItem(gameType === GAMES.MAKINATOR_PI ? "piStatistics" : "eStatistics") ?? "[]",
+                  localStorage.getItem(
+                    gameType === GAMES.MAKINATOR_PI
+                      ? "piStatistics"
+                      : "eStatistics",
+                  ) ?? "[]",
                 ) as IrrationalGuessStatistics[]
               ).sort(
-                (a: IrrationalGuessStatistics, b: IrrationalGuessStatistics) => b.score - a.score,
+                (a: IrrationalGuessStatistics, b: IrrationalGuessStatistics) =>
+                  b.score - a.score,
               )[0] ?? {
-                time,
+                time: gameData.time,
                 digits: currentGuesses.length - 6,
-                lives,
+                lives: gameData.lives,
                 score: calculateScore(),
               }
             }
@@ -327,6 +425,7 @@ export default function IrrationalGuess({gameType}: IrrationalGuessProps) {
             isOpen={errModal}
             setIsOpen={setErrModal}
           />
+          <LoadingScreen loading={gameOverLoading} text="Waiting for opponent to finish!" /> 
         </div>
       </Transitions>
     </AnimatePresence>

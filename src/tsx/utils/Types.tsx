@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { OnlineMakinatorGame } from "../../../../NotARoomba-Backend/models/online";
 
 export interface NavButtonProps {
   route: string;
@@ -84,19 +85,20 @@ export enum STATUS_CODES {
   USERNAME_IN_USE,
   NONE_IN_USE,
   NO_GAME_FOUND,
-  GAME_FULL
+  GAME_FULL,
 }
 
 export enum NotARoombaEvents {
-  CONNECT = 'connect',
-  DISCONNECT = 'disconnect',
-  REGISTER_USER = 'register_user',
-  JOIN_GAME = 'join_game',
-  CREATE_GAME = 'create_game',
-  UPDATE_GAME_DATA = 'update_game_data',
-  REQUEST_GAME_DATA = 'request_game_data',
-  START_GAME = 'start_game',
-  END_GAME = 'end_game'
+  CONNECT = "connect",
+  DISCONNECT = "disconnect",
+  REGISTER_USER = "register_user",
+  JOIN_GAME = "join_game",
+  CREATE_GAME = "create_game",
+  UPDATE_GAME_DATA = "update_game_data",
+  REQUEST_GAME_DATA = "request_game_data",
+  UPDATE_GAME_STATE = "update_game_state",
+  START_GAME = "start_game",
+  END_GAME = "end_game",
 }
 
 export interface VerificationModalProps extends BaseModalProps {
@@ -121,6 +123,7 @@ export interface User {
 
 export interface LoadingScreenProps {
   loading: boolean;
+  text?: string;
 }
 
 export interface Game {
@@ -150,5 +153,7 @@ export interface HighScore {
 }
 
 export interface IrrationalGuessProps {
-  gameType: GAMES.MAKINATOR_PI | GAMES.MAKINATOR_E
+  gameType: GAMES.MAKINATOR_PI | GAMES.MAKINATOR_E;
+  online?: boolean;
+  initialData?: OnlineMakinatorGame | null;
 }
