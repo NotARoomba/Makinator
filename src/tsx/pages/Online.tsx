@@ -22,6 +22,7 @@ export default function Online() {
         navigate("/login");
         return navigate(0);
       }
+      socket.open();
       socket.emit(
         NotARoombaEvents.REGISTER_USER,
         getCookie("userID"),
@@ -34,7 +35,7 @@ export default function Online() {
           }
         },
       );
-    })
+    });
   }, []);
   const createGame = () => {
     setLoading(true);
@@ -79,11 +80,11 @@ export default function Online() {
               className="mx-auto my-2 bg-transparent w-40 text-3xl uppercase font-bold text-center outline rounded outline-primary"
             />
           </div>
-          <div className="mx-auto justify-center flex flex-wrap">
+          <div className="mx-auto justify-center flex flex-wrap gap-y-6">
             <LinkButton action={createGame} text="Create Game" />
 
             <LinkButton action={joinGame} text="Join Game" />
-            <LinkButton route="/online/history" text="History" />
+            <LinkButton route="/play/online/history" text="History" />
           </div>
         </div>
         <AlertModal

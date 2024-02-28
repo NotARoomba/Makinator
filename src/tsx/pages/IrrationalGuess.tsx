@@ -122,7 +122,7 @@ export default function IrrationalGuess({
   };
   const onSubmit = () => {
     if (inputValue === "") setErrModal(true);
-    else if (gameOver && !online) setGameOverModal(true)
+    else if (gameOver && !online) setGameOverModal(true);
     else if (inputValue != numberToGuess[0]) {
       setWrongGuess(true);
       setTimeout(() => setWrongGuess(false), 1000);
@@ -167,7 +167,9 @@ export default function IrrationalGuess({
   };
   useEffect(() => {
     if (!gameOver) {
-      const interval = setInterval(() => {setTime(time => time +1);}, 1000);
+      const interval = setInterval(() => {
+        setTime((time) => time + 1);
+      }, 1000);
       return () => clearInterval(interval);
     } else if (gameOver) {
       document.documentElement.style.overflowY = "hidden";
@@ -178,13 +180,19 @@ export default function IrrationalGuess({
     return 200 * (currentGuesses.length - 6) * 3 ** gameData.lives;
   };
   useEffect(() => {
-    setGameData({ ...gameData, digits: currentGuesses.length - 6, time, score: calculateScore() });
+    setGameData({
+      ...gameData,
+      digits: currentGuesses.length - 6,
+      time,
+      score: calculateScore(),
+    });
   }, [currentGuesses]);
   useEffect(() => {
-    if (online) socket.emit(NotARoombaEvents.UPDATE_GAME_DATA, getCookie("userID"), {
-      ...gameData,
-      time,
-    });
+    if (online)
+      socket.emit(NotARoombaEvents.UPDATE_GAME_DATA, getCookie("userID"), {
+        ...gameData,
+        time,
+      });
   }, [gameData]);
   useEffect(() => {
     //save to localstoer array or online if have acc
@@ -245,10 +253,9 @@ export default function IrrationalGuess({
         }
         setGameOverModal(true);
       }
-    }
-    else if (online && gameOver) {
+    } else if (online && gameOver) {
       console.log("END GAME");
-      setGameOverLoading(true)
+      setGameOverLoading(true);
       // socket.emit(NotARoombaEvents.END_GAME);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -425,7 +432,10 @@ export default function IrrationalGuess({
             isOpen={errModal}
             setIsOpen={setErrModal}
           />
-          <LoadingScreen loading={gameOverLoading} text="Waiting for opponent to finish!" /> 
+          <LoadingScreen
+            loading={gameOverLoading}
+            text="Waiting for opponent to finish!"
+          />
         </div>
       </Transitions>
     </AnimatePresence>

@@ -1,7 +1,11 @@
 import { Triangle } from "react-loader-spinner";
 import { LoadingScreenProps } from "../../utils/Types";
 
-export default function LoadingScreen({ loading, text }: LoadingScreenProps) {
+export default function LoadingScreen({
+  loading,
+  text,
+  children,
+}: LoadingScreenProps) {
   return (
     <div
       className={
@@ -28,12 +32,13 @@ export default function LoadingScreen({ loading, text }: LoadingScreenProps) {
           </div>
         )}
         {text && loading && (
-          <p className="mx-auto text-center text-2xl font-bold">
+          <p className="mx-auto text-center text-2xl font-bold mb-2">
             {text.split("\n")[0]}
             <br />
             {text.split("\n")[1]}
           </p>
         )}
+        {children}
       </div>
     </div>
   );

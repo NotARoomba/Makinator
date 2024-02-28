@@ -8,6 +8,7 @@ import LoadingScreen from "../components/effects/LoadingScreen";
 import { OnlineMakinatorGame } from "../../../../NotARoomba-Backend/models/online";
 import IrrationalGuess from "./IrrationalGuess";
 import { socket } from "../../main";
+import LinkButton from "../components/misc/LinkButton";
 
 export default function OnlineGame() {
   // need to check if the game is valid and if not then post an error ahd durect back to online menu, if it is valid then check if 2 users are already in game and if so then send to main menu and then later check if the user isnt the same and then if not then add the user to the gameData and start the game,
@@ -78,6 +79,15 @@ export default function OnlineGame() {
                     }/2 Players!`
                   : `Loading Game...`) + `\nGame Code: ${gameID}`
               }
+              children={
+                <LinkButton
+                  text="Cancel"
+                  action={() => {
+                    socket.disconnect();
+                    navigate("/play/online");
+                  }}
+                />
+              }
             />
           ) : !gameOver ? (
             <>
@@ -86,7 +96,7 @@ export default function OnlineGame() {
                 online
                 initialData={game}
               />
-              <div className="bg-transparent text-text flex overflow-hidden h-1/2 w-1/2 mx-auto">
+              <div className="bg-transparent text-text flex overflow-hidden h-1/2 lg:w-1/2 mx-auto">
                 <div className="mx-auto justify-center mt-12 w-full">
                   <p className="text-4xl mt-4 mb-0 font-semibold text-center">
                     Opponent
@@ -124,60 +134,65 @@ export default function OnlineGame() {
                 </div>
               </div>
             </>
-          ) :
-            
-              <Transitions>
-                <div
-                  className={
-                    "bg-transparent text-text my-auto flex overflow-hidden h-[calc(100vh-80px)] w-full"
-                  }
-                >
-                  <div className="m-auto align-middle justify-center mt-20 w-full">
-                    <p className="text-4xl font-semibold text-center my-4 ">
-                       Game {game.gameID}
-                    </p>
-                    <div className="flex text-center justify-center text-lg my-2 w-full">
-                      <div className="w-1/3 font-bold text-2xl">
-                        <p className=" text-4xl ">
-                          {game.usernames[0]}
-                        </p>
-                        <p>
-                          {new Date(Object.values(game.gameData)[0].time * 1000)
-                            .toISOString()
-                            .slice(11, 19)}
-                        </p>
-                        <p>{Object.values(game.gameData)[0].score}</p>
-                        <p>{Object.values(game.gameData)[0].lives}</p>
-                        <p>{Object.values(game.gameData)[0].digits}</p>
-                      </div>
-                      <div className="w-1/6 font-bold text-secondary-300  text-2xl">
-                        {/* <p className="text-4xl text-text text-center "></p> */}
-                        <hr className="my-6 mb-4"></hr>
-                        <p>Time</p>
-                        <p>Score</p>
-                        <p>Lives</p>
-                        <p>Digits</p>
-                      </div>
-                      <div className="w-1/3 font-semibold text-2xl ">
-                        <p className=" text-4xl font-bold ">
-                          {game.usernames[1]}
-                        </p>
-                        <p>
-                          {new Date(Object.values(game.gameData)[1].time * 1000)
-                            .toISOString()
-                            .slice(11, 19)}
-                        </p>
-                        <p>{Object.values(game.gameData)[1].score}</p>
-                        <p>{Object.values(game.gameData)[1].lives}</p>
-                        <p>{Object.values(game.gameData)[1].digits}</p>
-                      </div>
+          ) : (
+            <Transitions>
+              <div
+                className={
+                  "bg-transparent text-text my-auto flex overflow-hidden h-[calc(100vh-80px)] w-full"
+                }
+              >
+                <div className="m-auto align-middle justify-center mt-20 w-full">
+                  <p className="text-4xl font-semibold text-center my-4 ">
+                    Game {game.gameID}
+                  </p>
+                  <div className="flex text-center justify-center text-lg my-2 w-full">
+                    <div className="w-1/3 font-bold text-xl lg:text-2xl">
+                      <p className="text-xl lg:text-4xl ">
+                        {game.usernames[0]}
+                      </p>
+                      <p>
+                        {new Date(Object.values(game.gameData)[0].time * 1000)
+                          .toISOString()
+                          .slice(11, 19)}
+                      </p>
+                      <p>{Object.values(game.gameData)[0].score}</p>
+                      <p>{Object.values(game.gameData)[0].lives}</p>
+                      <p>{Object.values(game.gameData)[0].digits}</p>
                     </div>
-                    <p className="mx-auto text-center text-secondary-200  text-5xl font-bold">{game.usernames[Object.keys(game.gameData).indexOf(game.winner ?? "")]} Won!</p>
+                    <div className="w-1/6 font-bold text-secondary-300 text-xl lg:text-2xl">
+                      <p className="text-2xl text-text text-center ">_</p>
+                      {/* <hr className="my-6 mb-4"></hr> */}
+                      <p>Time</p>
+                      <p>Score</p>
+                      <p>Lives</p>
+                      <p>Digits</p>
+                    </div>
+                    <div className="w-1/3 font-semibold text-xl lg:text-2xl ">
+                      <p className=" text-xl lg:text-4xl font-bold ">
+                        {game.usernames[1]}
+                      </p>
+                      <p>
+                        {new Date(Object.values(game.gameData)[1].time * 1000)
+                          .toISOString()
+                          .slice(11, 19)}
+                      </p>
+                      <p>{Object.values(game.gameData)[1].score}</p>
+                      <p>{Object.values(game.gameData)[1].lives}</p>
+                      <p>{Object.values(game.gameData)[1].digits}</p>
+                    </div>
                   </div>
+                  <p className="mx-auto text-center text-secondary-200 text-3xl  lg:text-5xl font-bold">
+                    {
+                      game.usernames[
+                        Object.keys(game.gameData).indexOf(game.winner ?? "")
+                      ]
+                    }{" "}
+                    Won!
+                  </p>
                 </div>
-              </Transitions>
-            
-          }
+              </div>
+            </Transitions>
+          )}
           <AlertModal
             title="Error"
             text="This game is unavailable to join!"

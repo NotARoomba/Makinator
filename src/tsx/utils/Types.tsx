@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import { OnlineMakinatorGame } from "../../../../NotARoomba-Backend/models/online";
 
 export interface NavButtonProps {
@@ -124,6 +124,7 @@ export interface User {
 export interface LoadingScreenProps {
   loading: boolean;
   text?: string;
+  children?: ReactNode;
 }
 
 export interface Game {
