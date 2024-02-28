@@ -31,7 +31,7 @@ export default function History() {
       className={"bg-transparent text-text my-auto flex h-[calc(100vh-80px)]"}
     >
       <div className="m-auto align-middle justify-center mt-20">
-        <p className="text-4xl font-semibold text-center my-4">Recent Games</p>
+        <p className="text-4xl font-semibold text-center my-4">Game History</p>
         <div className="mx-auto justify-center flex flex-wrap gap-8">
           <LinkButton route="/" text="Home" />
           <LinkButton route="/play" text="Play" />
@@ -73,7 +73,7 @@ export default function History() {
             ))
           ) : (
             <p className="text-2xl font-semibold text-center my-4 mx-auto">
-              There are no recent games!
+              You haven't played any online games!
             </p>
           )}
         </div>

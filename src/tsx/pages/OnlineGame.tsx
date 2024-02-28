@@ -189,6 +189,12 @@ export default function OnlineGame() {
                     }{" "}
                     Won!
                   </p>
+                  <div className="mx-auto flex mt-4">
+                    <LinkButton
+                      text="Back"
+                      action={() => navigate("/play/online/history")}
+                    />
+                  </div>
                 </div>
               </div>
             </Transitions>
