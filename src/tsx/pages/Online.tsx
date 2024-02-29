@@ -76,7 +76,7 @@ export default function Online() {
             <input
               value={code}
               maxLength={6}
-              onChange={(e) => setCode(e.currentTarget.value)}
+              onChange={(e) => setCode(e.currentTarget.value.toUpperCase())}
               className="mx-auto my-2 bg-transparent w-40 text-3xl uppercase font-bold text-center outline rounded outline-primary"
             />
           </div>
