@@ -73,9 +73,9 @@ export default function Signup() {
     if (res.status === STATUS_CODES.SUCCESS) {
       localStorage.clear();
       localStorage.setItem("userID", res.id);
+      navigate("/");
+      navigate(0);
     }
-    navigate("/");
-    navigate(0);
   };
   useEffect(() => {
     setLoading(true);

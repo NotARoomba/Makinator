@@ -34,19 +34,20 @@ export default function Leaderboards() {
       <div className="bg-transparent text-text text-center h-[calc(100%-80px)] w-full flex">
         <div className="m-auto justify-center h-full w-full align-middle text-center pt-20">
           <p className="text-4xl my-4 mb-0 font-semibold">Leaderboards</p>
-          <div className="flex justify-center gap-8 mb-4">
+          <div className="flex justify-center gap-y-8 mb-4 flex-wrap mt-2">
             {[
               { "Guess the Number": GAMES.MAKINATOR_GUESS },
               { "Digits of π": GAMES.MAKINATOR_PI },
               { "Digits of e": GAMES.MAKINATOR_E },
               // { "Online Play": GAMES.MAKINATOR_ONLINE },
             ].map((v, i) => (
+              <div className="w-1/3 min-w-52 px-2">
               <LinkButton
                 key={i}
                 text={Object.keys(v)[0]}
                 action={() => setGameType(Object.values(v)[0])}
                 selected={gameType === Object.values(v)[0]}
-              />
+              /></div>
             ))}
           </div>
           <table className="justify-around m-auto w-[85vw] table-fixed bg-background/70 ">
@@ -75,7 +76,7 @@ export default function Leaderboards() {
                       }
                     >
                       <td className="py-2">{i + 1}</td>
-                      <td>{score.score}</td>
+                      <td>{score.score ?? 0}</td>
                       <td className="sm:flex my-auto align-middle text-center justify-center">
                         {" "}
                         {score.avatar !== "" ? (

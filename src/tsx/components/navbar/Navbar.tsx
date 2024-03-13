@@ -15,6 +15,7 @@ export default function Navbar() {
     else if (menuRef.current && value) menuRef.current.style.display = "flex";
     document.body.style.overflowY = value ? "hidden" : "auto";
   };
+  console.log(getCookie("userID"))
 
   return (
     <div className="flex w-screen mx-auto shadow-lg h-20  bg-background border-b-2 border-background-800 z-20 absolute top-0 left-0">
@@ -59,7 +60,7 @@ export default function Navbar() {
           ></span>
         </div>
 
-        <div className="justify-left hidden lg:flex text-lg text-gray gap-4 mx-4">
+        <div key={getCookie("userID")} className="justify-left hidden lg:flex text-lg text-gray gap-4 mx-4">
           <NavButton route="/play" text="Play" />
           <NavButton route="/leaderboards" text="Leaderboards" />
           {getCookie("userID") ? (
