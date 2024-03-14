@@ -21,8 +21,8 @@ export default function Guess() {
   const [loading, setLoading] = useState(false);
   const [time, setTime] = useState(0);
   const resetGame = () => {
-    // setNumber(Math.floor(Math.random() * 100) + 1);
-    setNumber(69);
+    setNumber(Math.floor(Math.random() * 100) + 1);
+    // setNumber(69);
     setGuesses([]);
     setTime(0);
     setGameOver(false);
