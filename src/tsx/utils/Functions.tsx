@@ -104,7 +104,7 @@ export function generateProblem(digit: number, guesses: number) {
     randMax;
   // 1415926535
   // const randomness = Math.random() > 0.5;
-  if (guesses <= 10) {
+  if (guesses <= 25) {
     operations = ["+", "-"];
     let a,
       b,
@@ -116,8 +116,8 @@ export function generateProblem(digit: number, guesses: number) {
       b = getRandomInt(1, randMax);
     } while (o == operations[0] ? a + b !== digit : a - b !== digit);
     equation = `${a}${o}${b}=x`;
-  } else if (guesses > 10) {
-    randMax = 50 * Math.floor(guesses / 10);
+  } else if (guesses > 25) {
+    randMax = 5 * Math.floor(guesses / 10);
     let a,
       b,
       c = 0;
